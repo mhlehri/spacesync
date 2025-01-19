@@ -8,7 +8,7 @@ export const roomApi = baseApi.injectEndpoints({
       query: () => `rooms`,
     }),
     getRoomById: builder.query({
-      query: (_id) => `rooms/${_id}`,
+      query: (id: string) => `rooms/${id}`,
     }),
     getFeaturedRooms: builder.query({
       query: () => `rooms/featured`,

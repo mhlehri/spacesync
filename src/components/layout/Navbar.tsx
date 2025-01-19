@@ -1,7 +1,3 @@
-import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { Menu, X, ChevronDown, User } from "lucide-react";
-import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,10 +5,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { selectCurrentToken, selectCurrentUser } from "@/redux/store";
-import { useAppDispatch } from "@/redux/hook";
 import { logout } from "@/redux/features/auth/authSlice";
+import { useAppDispatch } from "@/redux/hook";
+import { selectCurrentToken, selectCurrentUser } from "@/redux/store";
+import { Menu, User, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Button } from "../ui/button";
 const navigation = [
   { name: "Home", href: "/" },
   { name: "Meeting Rooms", href: "/meeting-rooms" },
@@ -37,7 +37,6 @@ export default function Navbar() {
     if (token) {
       setUser({
         isAuthenticated: true,
-        // @ts-expect-error - CurrUser is not null
         isAdmin: CurrUser?.role === "admin",
       });
     }
