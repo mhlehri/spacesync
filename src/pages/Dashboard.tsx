@@ -1,5 +1,11 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -11,34 +17,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { SideNavbar } from "@/components/layout/SideNavbar";
-
-// Mock data (replace with actual data fetching in a real application)
-const rooms = [
-  {
-    id: 1,
-    name: "Executive Suite",
-    roomNo: "A101",
-    floorNo: 1,
-    capacity: 12,
-    pricePerSlot: 150,
-  },
-  {
-    id: 2,
-    name: "Brainstorm Hub",
-    roomNo: "B201",
-    floorNo: 2,
-    capacity: 8,
-    pricePerSlot: 100,
-  },
-];
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useGetAllRoomsQuery } from "@/redux/features/rooms/rooms";
+import { TRoom } from "@/types/room";
+import { useState } from "react";
 
 const slots = [
   {
@@ -80,7 +62,10 @@ const bookings = [
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("rooms");
-
+  const {
+    data: { data: rooms },
+    isLoading,
+  } = useGetAllRoomsQuery("");
   const renderContent = () => {
     switch (activeTab) {
       case "rooms":
@@ -147,23 +132,27 @@ export default function AdminDashboard() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {rooms.map((room) => (
-                  <TableRow key={room.id}>
-                    <TableCell>{room.name}</TableCell>
-                    <TableCell>{room.roomNo}</TableCell>
-                    <TableCell>{room.floorNo}</TableCell>
-                    <TableCell>{room.capacity}</TableCell>
-                    <TableCell>${room.pricePerSlot}</TableCell>
-                    <TableCell>
-                      <Button variant="outline" size="sm" className="mr-2">
-                        Update
-                      </Button>
-                      <Button variant="destructive" size="sm">
-                        Delete
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {isLoading
+                  ? "loading..."
+                  : rooms
+                  ? rooms.map((room: TRoom) => (
+                      <TableRow key={room._id}>
+                        <TableCell>{room.name}</TableCell>
+                        <TableCell>{room.roomNo}</TableCell>
+                        <TableCell>{room.floorNo}</TableCell>
+                        <TableCell>{room.capacity}</TableCell>
+                        <TableCell>${room.pricePerSlot}</TableCell>
+                        <TableCell>
+                          <Button variant="outline" size="sm" className="mr-2">
+                            Update
+                          </Button>
+                          <Button variant="destructive" size="sm">
+                            Delete
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  : "No rooms found"}
               </TableBody>
             </Table>
           </div>
@@ -307,24 +296,35 @@ export default function AdminDashboard() {
 
   return (
     <div className="flex h-screen bg-gray-100">
-      <div className="hidden md:flex w-64 flex-col">
-        <div className="flex-1 flex flex-col min-h-0 bg-white">
-          <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
-            <div className="flex items-center flex-shrink-0 px-4">
-              <h1 className="text-xl font-semibold">Admin Dashboard</h1>
-            </div>
-            <nav className="mt-5 flex-1 px-2 space-y-1">
-              <SideNavbar onTabChange={setActiveTab} />
-            </nav>
-          </div>
-        </div>
-      </div>
       <div className="flex flex-col w-0 flex-1 overflow-hidden">
         <main className="flex-1 relative z-0 overflow-y-auto focus:outline-none">
           <div className="py-6">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-              <div className="md:hidden mb-4">
-                <SideNavbar onTabChange={setActiveTab} />
+              <div className="mb-4">
+                <div className="py-2">
+                  <h2 className="mb-2  text-2xl font-semibold tracking-tight">
+                    Dashboard
+                  </h2>
+                  <Tabs
+                    defaultValue="rooms"
+                    className="w-fit"
+                    onValueChange={(value) => {
+                      setActiveTab(value);
+                    }}
+                  >
+                    <TabsList className="flex items-stretch h-full bg-gray-300">
+                      <TabsTrigger value="rooms" className="">
+                        Rooms
+                      </TabsTrigger>
+                      <TabsTrigger value="slots" className="">
+                        Slots
+                      </TabsTrigger>
+                      <TabsTrigger value="bookings" className="">
+                        Bookings
+                      </TabsTrigger>
+                    </TabsList>
+                  </Tabs>
+                </div>
               </div>
               {renderContent()}
             </div>
