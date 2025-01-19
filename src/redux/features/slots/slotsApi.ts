@@ -6,9 +6,12 @@ const slotsApi = baseApi.injectEndpoints({
       query: ({ date, roomId }) =>
         `slots/availability?date=${date}&roomId=${roomId}`,
     }),
+    getAllSlots: builder.query({
+      query: () => `slots`,
+    }),
   }),
 });
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetAvailableSlotsQuery } = slotsApi;
+export const { useGetAvailableSlotsQuery, useGetAllSlotsQuery } = slotsApi;

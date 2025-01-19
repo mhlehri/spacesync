@@ -19,27 +19,28 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGetAllRoomsQuery } from "@/redux/features/rooms/rooms";
+import { useGetAllSlotsQuery } from "@/redux/features/slots/slotsApi";
 import { TRoom } from "@/types/room";
 import { useState } from "react";
 
-const slots = [
-  {
-    id: 1,
-    roomName: "Executive Suite",
-    roomNo: "A101",
-    date: "2023-07-15",
-    startTime: "09:00",
-    endTime: "10:00",
-  },
-  {
-    id: 2,
-    roomName: "Brainstorm Hub",
-    roomNo: "B201",
-    date: "2023-07-15",
-    startTime: "14:00",
-    endTime: "15:00",
-  },
-];
+// const slots = [
+//   {
+//     id: 1,
+//     roomName: "Executive Suite",
+//     roomNo: "A101",
+//     date: "2023-07-15",
+//     startTime: "09:00",
+//     endTime: "10:00",
+//   },
+//   {
+//     id: 2,
+//     roomName: "Brainstorm Hub",
+//     roomNo: "B201",
+//     date: "2023-07-15",
+//     startTime: "14:00",
+//     endTime: "15:00",
+//   },
+// ];
 
 const bookings = [
   {
@@ -62,10 +63,12 @@ const bookings = [
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("rooms");
-  const {
-    data: { data: rooms },
-    isLoading,
-  } = useGetAllRoomsQuery("");
+  const { data, isLoading } = useGetAllRoomsQuery("");
+  const { data: slotsData, isLoading: slotsIsloading } =
+    useGetAllSlotsQuery("");
+  console.log(data);
+  const rooms = data?.data || [];
+  const slots = slotsData?.data || [];
   const renderContent = () => {
     switch (activeTab) {
       case "rooms":
@@ -135,7 +138,7 @@ export default function AdminDashboard() {
                 {isLoading
                   ? "loading..."
                   : rooms
-                  ? rooms.map((room: TRoom) => (
+                  ? rooms?.map((room: TRoom) => (
                       <TableRow key={room._id}>
                         <TableCell>{room.name}</TableCell>
                         <TableCell>{room.roomNo}</TableCell>
@@ -217,23 +220,27 @@ export default function AdminDashboard() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {slots.map((slot) => (
-                  <TableRow key={slot.id}>
-                    <TableCell>{slot.roomName}</TableCell>
-                    <TableCell>{slot.roomNo}</TableCell>
-                    <TableCell>{slot.date}</TableCell>
-                    <TableCell>{slot.startTime}</TableCell>
-                    <TableCell>{slot.endTime}</TableCell>
-                    <TableCell>
-                      <Button variant="outline" size="sm" className="mr-2">
-                        Update
-                      </Button>
-                      <Button variant="destructive" size="sm">
-                        Delete
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {slotsIsloading
+                  ? "loading..."
+                  : slots
+                  ? slots.map((slot) => (
+                      <TableRow key={slot._id}>
+                        <TableCell>{slot.room.name}</TableCell>
+                        <TableCell>{slot.room.roomNo}</TableCell>
+                        <TableCell>{slot.date}</TableCell>
+                        <TableCell>{slot.startTime}</TableCell>
+                        <TableCell>{slot.endTime}</TableCell>
+                        <TableCell>
+                          <Button variant="outline" size="sm" className="mr-2">
+                            Update
+                          </Button>
+                          <Button variant="destructive" size="sm">
+                            Delete
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  : "No slots found"}
               </TableBody>
             </Table>
           </div>
@@ -295,7 +302,7 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex  bg-gray-100">
       <div className="flex flex-col w-0 flex-1 overflow-hidden">
         <main className="flex-1 relative z-0 overflow-y-auto focus:outline-none">
           <div className="py-6">
