@@ -74,7 +74,7 @@ export default function MeetingRooms() {
   const indexOfLastRoom = currentPage * roomsPerPage;
   const indexOfFirstRoom = indexOfLastRoom - roomsPerPage;
   const currentRooms = rooms.slice(indexOfFirstRoom, indexOfLastRoom);
-  const totalPages = Math.ceil(rooms.length / roomsPerPage);
+  const totalPages = Math.ceil(rooms?.length / roomsPerPage);
 
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error fetching data</div>;

@@ -31,7 +31,6 @@ const Stripe_PK = import.meta.env.VITE_STRIPE_PK;
 const stripePromise = loadStripe(Stripe_PK);
 
 function Form() {
-  const [error, setError] = useState(null);
   const [clientSecret, setClientSecret] = useState("");
   const [transactionId, setTransactionId] = useState("");
 
@@ -66,10 +65,12 @@ function Form() {
   };
   const { toast: t } = useToast();
   console.log(bookingData, "bookingData");
+  const [loading, setLoading] = useState(false);
 
   const [addBooking, { isError }] = useAddBookingMutation();
 
   const handleConfirmBooking = async (e: { preventDefault: () => void }) => {
+    setLoading(true);
     e.preventDefault();
     if (!stripe || !elements) {
       return;
@@ -85,10 +86,13 @@ function Form() {
     });
 
     if (error) {
-      setError(error.message);
-    } else {
-      setError("");
+      toast.error("Payment Failed", {
+        description: error.message,
+        richColors: true,
+      });
+      setLoading(false);
     }
+
     //? confirm Payment
     const { paymentIntent, error: confirmError } =
       await stripe.confirmCardPayment(clientSecret, {
@@ -101,6 +105,7 @@ function Form() {
         },
       });
     if (confirmError) {
+      setLoading(false);
       console.log("confirm error", confirmError);
       toast.error("Payment Failed", {
         description: confirmError.message,
@@ -115,13 +120,13 @@ function Form() {
             richColors: true,
           });
         } else if (res.data || !isError) {
+          setLoading(false);
           t({
             title: "Booking Confirmed",
 
-            description:
-              "Thank you for your booking. We've sent a confirmation email to your email address.",
+            description: `Thank you for your booking. We've sent a confirmation email to your email address. Your booking ID is ${res.data?.data._id}. Your transaction ID is ${paymentIntent.id}`,
           });
-          setTransactionId(paymentIntent.id);
+          setTransactionId(transactionId);
           navigate("/my-bookings", { replace: true });
         }
       }
@@ -207,7 +212,11 @@ function Form() {
         </div>
       </div>
 
-      <AnimatedButton onClick={handleConfirmBooking} className="w-full">
+      <AnimatedButton
+        disabled={loading}
+        onClick={handleConfirmBooking}
+        className="w-full"
+      >
         Confirm and Pay
       </AnimatedButton>
     </div>

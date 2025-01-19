@@ -1,4 +1,4 @@
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { BookingForm } from "@/components/pages/Booking/booking-form";
 import {
@@ -18,20 +18,17 @@ export default function Booking() {
   const location = useLocation();
   const { room } = location.state;
   const [slot, setSlot] = useState("");
+  //
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleBookingSubmit = (data: any) => {
     // In a real application, you would send this data to your backend
-    console.log("Booking submitted:", {
-      roomId: room._id,
-      ...data,
-      user: user?._id,
-    });
+
     // Navigate to the confirmation page
     const bookingData = { room, ...data, user: user, slot: slot };
     navigate(`/booking/${room._id}/confirmation`, {
       state: { bookingData },
     });
   };
-  console.log(room);
 
   if (!room) {
     return <div>Loading...</div>;

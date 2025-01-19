@@ -13,7 +13,7 @@ import { TBooking } from "@/types/booking";
 
 export default function MyBookings() {
   const user = selectCurrentUser();
-  const { data } = useGetAllMyBookingsQuery(user?._id as string);
+  const { data, isLoading } = useGetAllMyBookingsQuery(user?._id as string);
   console.log("my bookings data =>", data);
 
   return (
@@ -29,13 +29,17 @@ export default function MyBookings() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data?.data.map((booking: TBooking) => (
-            <TableRow key={booking._id}>
-              <TableCell>{booking.room.name}</TableCell>
-              <TableCell>{booking.date.toLocaleString()}</TableCell>
-              <TableCell>{booking.isConfirmed}</TableCell>
-            </TableRow>
-          ))}
+          {data && !isLoading
+            ? data?.data.map((booking: TBooking) => (
+                <TableRow key={booking._id}>
+                  <TableCell>{booking.room.name}</TableCell>
+                  <TableCell>{booking.date.toLocaleString()}</TableCell>
+                  <TableCell>{booking.isConfirmed}</TableCell>
+                </TableRow>
+              ))
+            : isLoading
+            ? "loading..."
+            : "No bookings yet"}
         </TableBody>
       </Table>
     </div>

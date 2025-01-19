@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { format, set } from "date-fns";
+import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -89,7 +89,8 @@ export function BookingForm({
       ? []
       : availableSlots &&
         availableSlots?.data?.map(
-          (slot) => `${slot.startTime} - ${slot.endTime}`
+          (slot: { startTime: string; endTime: string }) =>
+            `${slot.startTime} - ${slot.endTime}`
         );
     setTimeSlot(timeSlot);
   }, [availableSlots, date, isError, form]);
@@ -164,7 +165,8 @@ export function BookingForm({
               <Select
                 onValueChange={(value) => {
                   const selectedSlot = availableSlots?.data?.find(
-                    (slot) => `${slot.startTime} - ${slot.endTime}` === value
+                    (slot: { startTime: string; endTime: string }) =>
+                      `${slot.startTime} - ${slot.endTime}` === value
                   );
                   field.onChange(value);
                   setSlot(selectedSlot?._id);

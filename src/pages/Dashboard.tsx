@@ -18,9 +18,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { SideNavbar } from "@/components/layout/SideNavbar";
 
-// This would typically come from an API or database
-const initialRooms = [
+// Mock data (replace with actual data fetching in a real application)
+const rooms = [
   {
     id: 1,
     name: "Executive Suite",
@@ -37,10 +38,9 @@ const initialRooms = [
     capacity: 8,
     pricePerSlot: 100,
   },
-  // ... more rooms
 ];
 
-const initialSlots = [
+const slots = [
   {
     id: 1,
     roomName: "Executive Suite",
@@ -57,10 +57,9 @@ const initialSlots = [
     startTime: "14:00",
     endTime: "15:00",
   },
-  // ... more slots
 ];
 
-const initialBookings = [
+const bookings = [
   {
     id: 1,
     roomName: "Executive Suite",
@@ -77,356 +76,261 @@ const initialBookings = [
     time: "14:00-15:00",
     status: "Unconfirmed",
   },
-  // ... more bookings
 ];
 
 export default function AdminDashboard() {
-  const [rooms, setRooms] = useState(initialRooms);
-  const [slots, setSlots] = useState(initialSlots);
-  const [bookings, setBookings] = useState(initialBookings);
-  const [newRoom, setNewRoom] = useState({
-    name: "",
-    roomNo: "",
-    floorNo: "",
-    capacity: "",
-    pricePerSlot: "",
-  });
-  const [newSlot, setNewSlot] = useState({
-    roomName: "",
-    roomNo: "",
-    date: "",
-    startTime: "",
-    endTime: "",
-  });
+  const [activeTab, setActiveTab] = useState("rooms");
 
-  const handleAddRoom = () => {
-    const roomToAdd = {
-      id: rooms.length + 1,
-      name: newRoom.name,
-      roomNo: newRoom.roomNo,
-      floorNo: parseInt(newRoom.floorNo),
-      capacity: parseInt(newRoom.capacity),
-      pricePerSlot: parseInt(newRoom.pricePerSlot),
-    };
-    setRooms([...rooms, roomToAdd]);
-    setNewRoom({
-      name: "",
-      roomNo: "",
-      floorNo: "",
-      capacity: "",
-      pricePerSlot: "",
-    });
-  };
-
-  const handleAddSlot = () => {
-    const slotToAdd = {
-      id: slots.length + 1,
-      ...newSlot,
-    };
-    setSlots([...slots, slotToAdd]);
-    setNewSlot({
-      roomName: "",
-      roomNo: "",
-      date: "",
-      startTime: "",
-      endTime: "",
-    });
-  };
-
-  const handleUpdateBookingStatus = (bookingId: number, newStatus: string) => {
-    setBookings(
-      bookings.map((booking) =>
-        booking.id === bookingId ? { ...booking, status: newStatus } : booking
-      )
-    );
+  const renderContent = () => {
+    switch (activeTab) {
+      case "rooms":
+        return (
+          <div>
+            <h2 className="text-2xl font-semibold mb-4">Room Management</h2>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button className="mb-4">Add New Room</Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Add New Room</DialogTitle>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="name" className="text-right">
+                      Name
+                    </Label>
+                    <Input id="name" className="col-span-3" />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="roomNo" className="text-right">
+                      Room No.
+                    </Label>
+                    <Input id="roomNo" className="col-span-3" />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="floorNo" className="text-right">
+                      Floor No.
+                    </Label>
+                    <Input id="floorNo" type="number" className="col-span-3" />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="capacity" className="text-right">
+                      Capacity
+                    </Label>
+                    <Input id="capacity" type="number" className="col-span-3" />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="pricePerSlot" className="text-right">
+                      Price Per Slot
+                    </Label>
+                    <Input
+                      id="pricePerSlot"
+                      type="number"
+                      className="col-span-3"
+                    />
+                  </div>
+                </div>
+                <Button>Add Room</Button>
+              </DialogContent>
+            </Dialog>
+            <Table>
+              <TableCaption>A list of all rooms</TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Room No.</TableHead>
+                  <TableHead>Floor No.</TableHead>
+                  <TableHead>Capacity</TableHead>
+                  <TableHead>Price Per Slot</TableHead>
+                  <TableHead>Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {rooms.map((room) => (
+                  <TableRow key={room.id}>
+                    <TableCell>{room.name}</TableCell>
+                    <TableCell>{room.roomNo}</TableCell>
+                    <TableCell>{room.floorNo}</TableCell>
+                    <TableCell>{room.capacity}</TableCell>
+                    <TableCell>${room.pricePerSlot}</TableCell>
+                    <TableCell>
+                      <Button variant="outline" size="sm" className="mr-2">
+                        Update
+                      </Button>
+                      <Button variant="destructive" size="sm">
+                        Delete
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        );
+      case "slots":
+        return (
+          <div>
+            <h2 className="text-2xl font-semibold mb-4">Slots Management</h2>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button className="mb-4">Add New Slot</Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Add New Slot</DialogTitle>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="roomName" className="text-right">
+                      Room Name
+                    </Label>
+                    <Input id="roomName" className="col-span-3" />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="roomNo" className="text-right">
+                      Room No.
+                    </Label>
+                    <Input id="roomNo" className="col-span-3" />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="date" className="text-right">
+                      Date
+                    </Label>
+                    <Input id="date" type="date" className="col-span-3" />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="startTime" className="text-right">
+                      Start Time
+                    </Label>
+                    <Input id="startTime" type="time" className="col-span-3" />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="endTime" className="text-right">
+                      End Time
+                    </Label>
+                    <Input id="endTime" type="time" className="col-span-3" />
+                  </div>
+                </div>
+                <Button>Add Slot</Button>
+              </DialogContent>
+            </Dialog>
+            <Table>
+              <TableCaption>A list of all slots</TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Room Name</TableHead>
+                  <TableHead>Room No.</TableHead>
+                  <TableHead>Date</TableHead>
+                  <TableHead>Start Time</TableHead>
+                  <TableHead>End Time</TableHead>
+                  <TableHead>Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {slots.map((slot) => (
+                  <TableRow key={slot.id}>
+                    <TableCell>{slot.roomName}</TableCell>
+                    <TableCell>{slot.roomNo}</TableCell>
+                    <TableCell>{slot.date}</TableCell>
+                    <TableCell>{slot.startTime}</TableCell>
+                    <TableCell>{slot.endTime}</TableCell>
+                    <TableCell>
+                      <Button variant="outline" size="sm" className="mr-2">
+                        Update
+                      </Button>
+                      <Button variant="destructive" size="sm">
+                        Delete
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        );
+      case "bookings":
+        return (
+          <div>
+            <h2 className="text-2xl font-semibold mb-4">Booking Management</h2>
+            <Table>
+              <TableCaption>A list of all bookings</TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Room Name</TableHead>
+                  <TableHead>User Name</TableHead>
+                  <TableHead>Date</TableHead>
+                  <TableHead>Time</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {bookings.map((booking) => (
+                  <TableRow key={booking.id}>
+                    <TableCell>{booking.roomName}</TableCell>
+                    <TableCell>{booking.userName}</TableCell>
+                    <TableCell>{booking.date}</TableCell>
+                    <TableCell>{booking.time}</TableCell>
+                    <TableCell>{booking.status}</TableCell>
+                    <TableCell>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="mr-2"
+                        onClick={() => {
+                          // Handle approve action
+                        }}
+                      >
+                        Approve
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => {
+                          // Handle reject action
+                        }}
+                      >
+                        Reject
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        );
+      default:
+        return null;
+    }
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <h1 className="text-3xl font-bold mb-8">Admin Dashboard</h1>
-
-      <section className="mb-12">
-        <h2 className="text-2xl font-semibold mb-4">Room Management</h2>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button>Add New Room</Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Add New Room</DialogTitle>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-right">
-                  Name
-                </Label>
-                <Input
-                  id="name"
-                  value={newRoom.name}
-                  onChange={(e) =>
-                    setNewRoom({ ...newRoom, name: e.target.value })
-                  }
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="roomNo" className="text-right">
-                  Room No.
-                </Label>
-                <Input
-                  id="roomNo"
-                  value={newRoom.roomNo}
-                  onChange={(e) =>
-                    setNewRoom({ ...newRoom, roomNo: e.target.value })
-                  }
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="floorNo" className="text-right">
-                  Floor No.
-                </Label>
-                <Input
-                  id="floorNo"
-                  type="number"
-                  value={newRoom.floorNo}
-                  onChange={(e) =>
-                    setNewRoom({ ...newRoom, floorNo: e.target.value })
-                  }
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="capacity" className="text-right">
-                  Capacity
-                </Label>
-                <Input
-                  id="capacity"
-                  type="number"
-                  value={newRoom.capacity}
-                  onChange={(e) =>
-                    setNewRoom({ ...newRoom, capacity: e.target.value })
-                  }
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="pricePerSlot" className="text-right">
-                  Price Per Slot
-                </Label>
-                <Input
-                  id="pricePerSlot"
-                  type="number"
-                  value={newRoom.pricePerSlot}
-                  onChange={(e) =>
-                    setNewRoom({ ...newRoom, pricePerSlot: e.target.value })
-                  }
-                  className="col-span-3"
-                />
-              </div>
+    <div className="flex h-screen bg-gray-100">
+      <div className="hidden md:flex w-64 flex-col">
+        <div className="flex-1 flex flex-col min-h-0 bg-white">
+          <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
+            <div className="flex items-center flex-shrink-0 px-4">
+              <h1 className="text-xl font-semibold">Admin Dashboard</h1>
             </div>
-            <Button onClick={handleAddRoom}>Add Room</Button>
-          </DialogContent>
-        </Dialog>
-        <Table>
-          <TableCaption>A list of all rooms</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Room No.</TableHead>
-              <TableHead>Floor No.</TableHead>
-              <TableHead>Capacity</TableHead>
-              <TableHead>Price Per Slot</TableHead>
-              <TableHead>Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {rooms.map((room) => (
-              <TableRow key={room.id}>
-                <TableCell>{room.name}</TableCell>
-                <TableCell>{room.roomNo}</TableCell>
-                <TableCell>{room.floorNo}</TableCell>
-                <TableCell>{room.capacity}</TableCell>
-                <TableCell>${room.pricePerSlot}</TableCell>
-                <TableCell>
-                  <Button variant="outline" size="sm" className="mr-2">
-                    Update
-                  </Button>
-                  <Button variant="destructive" size="sm">
-                    Delete
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </section>
-
-      <section className="mb-12">
-        <h2 className="text-2xl font-semibold mb-4">Slots Management</h2>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button>Add New Slot</Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Add New Slot</DialogTitle>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="roomName" className="text-right">
-                  Room Name
-                </Label>
-                <Input
-                  id="roomName"
-                  value={newSlot.roomName}
-                  onChange={(e) =>
-                    setNewSlot({ ...newSlot, roomName: e.target.value })
-                  }
-                  className="col-span-3"
-                />
+            <nav className="mt-5 flex-1 px-2 space-y-1">
+              <SideNavbar onTabChange={setActiveTab} />
+            </nav>
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-col w-0 flex-1 overflow-hidden">
+        <main className="flex-1 relative z-0 overflow-y-auto focus:outline-none">
+          <div className="py-6">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+              <div className="md:hidden mb-4">
+                <SideNavbar onTabChange={setActiveTab} />
               </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="roomNo" className="text-right">
-                  Room No.
-                </Label>
-                <Input
-                  id="roomNo"
-                  value={newSlot.roomNo}
-                  onChange={(e) =>
-                    setNewSlot({ ...newSlot, roomNo: e.target.value })
-                  }
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="date" className="text-right">
-                  Date
-                </Label>
-                <Input
-                  id="date"
-                  type="date"
-                  value={newSlot.date}
-                  onChange={(e) =>
-                    setNewSlot({ ...newSlot, date: e.target.value })
-                  }
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="startTime" className="text-right">
-                  Start Time
-                </Label>
-                <Input
-                  id="startTime"
-                  type="time"
-                  value={newSlot.startTime}
-                  onChange={(e) =>
-                    setNewSlot({ ...newSlot, startTime: e.target.value })
-                  }
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="endTime" className="text-right">
-                  End Time
-                </Label>
-                <Input
-                  id="endTime"
-                  type="time"
-                  value={newSlot.endTime}
-                  onChange={(e) =>
-                    setNewSlot({ ...newSlot, endTime: e.target.value })
-                  }
-                  className="col-span-3"
-                />
-              </div>
+              {renderContent()}
             </div>
-            <Button onClick={handleAddSlot}>Add Slot</Button>
-          </DialogContent>
-        </Dialog>
-        <Table>
-          <TableCaption>A list of all slots</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Room Name</TableHead>
-              <TableHead>Room No.</TableHead>
-              <TableHead>Date</TableHead>
-              <TableHead>Start Time</TableHead>
-              <TableHead>End Time</TableHead>
-              <TableHead>Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {slots.map((slot) => (
-              <TableRow key={slot.id}>
-                <TableCell>{slot.roomName}</TableCell>
-                <TableCell>{slot.roomNo}</TableCell>
-                <TableCell>{slot.date}</TableCell>
-                <TableCell>{slot.startTime}</TableCell>
-                <TableCell>{slot.endTime}</TableCell>
-                <TableCell>
-                  <Button variant="outline" size="sm" className="mr-2">
-                    Update
-                  </Button>
-                  <Button variant="destructive" size="sm">
-                    Delete
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </section>
-
-      <section>
-        <h2 className="text-2xl font-semibold mb-4">Booking Management</h2>
-        <Table>
-          <TableCaption>A list of all bookings</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Room Name</TableHead>
-              <TableHead>User Name</TableHead>
-              <TableHead>Date</TableHead>
-              <TableHead>Time</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {bookings.map((booking) => (
-              <TableRow key={booking.id}>
-                <TableCell>{booking.roomName}</TableCell>
-                <TableCell>{booking.userName}</TableCell>
-                <TableCell>{booking.date}</TableCell>
-                <TableCell>{booking.time}</TableCell>
-                <TableCell>{booking.status}</TableCell>
-                <TableCell>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="mr-2"
-                    onClick={() =>
-                      handleUpdateBookingStatus(booking.id, "Confirmed")
-                    }
-                  >
-                    Approve
-                  </Button>
-                  <Button
-                    variant="destructive"
-                    size="sm"
-                    onClick={() =>
-                      handleUpdateBookingStatus(booking.id, "Rejected")
-                    }
-                  >
-                    Reject
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </section>
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

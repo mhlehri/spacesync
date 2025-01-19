@@ -13,7 +13,7 @@ export function RoomCard({ room }: RoomCardProps) {
       <CardContent className="p-0">
         <div className="relative h-48 w-full">
           <img
-            src={room.image || "/placeholder.svg"}
+            src={"/placeholder.svg"}
             alt={room.name}
             className="object-cover h-full w-full"
           />

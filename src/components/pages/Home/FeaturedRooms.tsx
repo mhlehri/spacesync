@@ -25,7 +25,7 @@ export default function FeaturedRooms() {
                 </div>
               </div>
             ))
-          ) : !isLoading && featuredRooms.length > 0 ? (
+          ) : !isLoading && featuredRooms?.length > 0 ? (
             featuredRooms?.map((room: TRoom) => (
               <RoomCard key={room._id} room={room} />
             ))

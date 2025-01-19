@@ -87,15 +87,17 @@ export default function RoomDetails() {
                   </dt>
                   <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                     <ul className="border border-gray-200 rounded-md divide-y divide-gray-200">
-                      {room.amenities.length > 0 &&
-                        room.amenities.map((amenity: string, index: number) => (
-                          <li
-                            key={index}
-                            className="pl-3 pr-4 py-3 flex items-center justify-between text-sm"
-                          >
-                            {amenity}
-                          </li>
-                        ))}
+                      {room?.amenities?.length > 0 &&
+                        room?.amenities?.map(
+                          (amenity: string, index: number) => (
+                            <li
+                              key={index}
+                              className="pl-3 pr-4 py-3 flex items-center justify-between text-sm"
+                            >
+                              {amenity}
+                            </li>
+                          )
+                        )}
                     </ul>
                   </dd>
                 </div>
