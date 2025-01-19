@@ -12,9 +12,16 @@ const bookingsApi = baseApi.injectEndpoints({
         body: data,
       }),
     }),
+    getAllBookings: builder.query({
+      query: () => `bookings`,
+    }),
   }),
 });
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetAllMyBookingsQuery, useAddBookingMutation } = bookingsApi;
+export const {
+  useGetAllMyBookingsQuery,
+  useAddBookingMutation,
+  useGetAllBookingsQuery,
+} = bookingsApi;
