@@ -28,6 +28,7 @@ import { TBooking } from "@/types/booking";
 import { TRoom } from "@/types/room";
 import { TSlot } from "@/types/slot";
 import { useState } from "react";
+import { toast } from "sonner";
 
 // const slots = [
 //   {
@@ -166,7 +167,20 @@ export default function AdminDashboard() {
                           </Button>
                           <Button
                             onClick={async () => {
-                              await deleteRoom(room._id);
+                              const res = await deleteRoom(room._id);
+
+                              if (res.data) {
+                                toast.success("Room deleted successfully", {
+                                  richColors: true,
+                                  position: "top-right",
+                                });
+                              }
+                              if (res.error) {
+                                toast.error("An error occurred", {
+                                  richColors: true,
+                                  position: "top-right",
+                                });
+                              }
                             }}
                             variant="destructive"
                             size="sm"

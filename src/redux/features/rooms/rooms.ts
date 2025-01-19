@@ -6,12 +6,14 @@ export const roomApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllRooms: builder.query({
       query: () => `rooms`,
+      providesTags: ["Room"],
     }),
     getRoomById: builder.query({
       query: (id: string) => `rooms/${id}`,
     }),
     getFeaturedRooms: builder.query({
       query: () => `rooms/featured`,
+      providesTags: ["Room"],
     }),
     deleteRoomById: builder.mutation({
       query: (id) => ({
