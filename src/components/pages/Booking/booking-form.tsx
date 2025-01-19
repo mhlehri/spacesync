@@ -30,6 +30,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useGetAvailableSlotsQuery } from "@/redux/features/slots/slotsApi";
+import { useEffect, useState } from "react";
 
 const formSchema = z.object({
   date: z.date({
@@ -49,26 +51,46 @@ const formSchema = z.object({
   }),
 });
 
-const timeSlots = [
-  "09:00 - 10:00",
-  "10:00 - 11:00",
-  "11:00 - 12:00",
-  "13:00 - 14:00",
-  "14:00 - 15:00",
-  "15:00 - 16:00",
-  "16:00 - 17:00",
-];
-
 export function BookingForm({
   onSubmit,
+  roomId,
   user,
 }: {
   onSubmit: (data: z.infer<typeof formSchema>) => void;
   user: { name: string; email: string; phone: string };
+  roomId: string;
 }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      date: new Date(Date.now() + 86400000),
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+    },
   });
+
+  const [date, setDate] = useState(form.getValues().date);
+  const [timeSlots, setTimeSlot] = useState([]);
+  // console.log(format(form.watch("date"), "yyyy-MM-dd"));
+  const { data: availableSlots, isError } = useGetAvailableSlotsQuery({
+    // date: format(form.getValues().date, "yyyy-MM-dd"),
+    date: format(date, "yyyy-MM-dd"),
+    roomId,
+  });
+
+  console.log(date);
+  // console.log(availableSlots?.data);
+  useEffect(() => {
+    const timeSlot = isError
+      ? []
+      : availableSlots &&
+        availableSlots?.data?.map(
+          (slot) => `${slot.startTime} - ${slot.endTime}`
+        );
+    setTimeSlot(timeSlot);
+  }, [availableSlots, date, isError, form]);
+  // console.log(timeSlots);
 
   return (
     <Form {...form}>
@@ -90,7 +112,7 @@ export function BookingForm({
                       )}
                     >
                       {field.value ? (
-                        format(field.value, "PPP")
+                        format(field.value, "yyyy-MM-dd")
                       ) : (
                         <span>Pick a date</span>
                       )}
@@ -102,7 +124,16 @@ export function BookingForm({
                   <Calendar
                     mode="single"
                     selected={field.value}
-                    onSelect={field.onChange}
+                    onSelect={(selectedDate) => {
+                      if (
+                        selectedDate &&
+                        format(selectedDate, "yyyy-MM-dd") !==
+                          format(date, "yyyy-MM-dd")
+                      ) {
+                        field.onChange(selectedDate);
+                        setDate(selectedDate);
+                      }
+                    }}
                     disabled={(date) =>
                       date < new Date() ||
                       date >
@@ -119,6 +150,7 @@ export function BookingForm({
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="timeSlot"
@@ -132,20 +164,23 @@ export function BookingForm({
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {timeSlots.map((slot) => (
+                  {timeSlots?.map((slot) => (
                     <SelectItem key={slot} value={slot}>
                       {slot}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
-              <FormDescription>
-                Choose your preferred time slot.
+              <FormDescription className={`${isError ? "text-red-500" : ""}`}>
+                {isError
+                  ? "No Slot Available for this date"
+                  : "Choose your preferred time slot."}
               </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="name"
@@ -153,11 +188,7 @@ export function BookingForm({
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="John Doe"
-                  defaultValue={user.name}
-                  {...field}
-                />
+                <Input placeholder="John Doe" {...field} />
               </FormControl>
               <FormDescription>Enter your full name.</FormDescription>
               <FormMessage />
@@ -171,11 +202,7 @@ export function BookingForm({
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="john@example.com"
-                  defaultValue={user.email}
-                  {...field}
-                />
+                <Input placeholder="john@example.com" {...field} />
               </FormControl>
               <FormDescription>Enter your email address.</FormDescription>
               <FormMessage />
@@ -189,11 +216,7 @@ export function BookingForm({
             <FormItem>
               <FormLabel>Phone</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="1234567890"
-                  defaultValue={user.phone}
-                  {...field}
-                />
+                <Input placeholder="1234567890" {...field} />
               </FormControl>
               <FormDescription>Enter your phone number.</FormDescription>
               <FormMessage />
@@ -201,7 +224,9 @@ export function BookingForm({
           )}
         />
         <Button
-          disabled={form.formState.isLoading}
+          disabled={
+            isError || form.formState.isLoading || !form.formState.isValid
+          }
           type="submit"
           className="bg-indigo-500 hover:bg-indigo-600"
         >

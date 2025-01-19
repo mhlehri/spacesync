@@ -10,27 +10,50 @@ import {
 } from "@/components/ui/dialog";
 // import { loadStripe } from "@stripe/stripe-js";
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 
 // This would typically come from the previous page's form submission
-const bookingDetails = {
-  room: {
-    name: "Executive Suite",
-    pricePerSlot: 150,
-  },
-  date: new Date(),
-  slot: { startTime: "09:00", endTime: "10:00" },
-  userInfo: {
-    name: "John Doe",
-    email: "john@example.com",
-    phone: "123-456-7890",
-  },
-};
 
 // const stripePromise = loadStripe(
 //   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 // );
 
+import * as React from "react";
+import { loadStripe } from "@stripe/stripe-js";
+import {
+  EmbeddedCheckoutProvider,
+  EmbeddedCheckout,
+} from "@stripe/react-stripe-js";
+
+// Make sure to call `loadStripe` outside of a component’s render to avoid
+// recreating the `Stripe` object on every render.
+const stripePromise = loadStripe("pk_test_123");
+
+const App = () => {
+  const fetchClientSecret = React.useCallback(() => {
+    // Create a Checkout Session
+    return fetch("/create-checkout-session", {
+      method: "POST",
+    })
+      .then((res) => res.json())
+      .then((data) => data.clientSecret);
+  }, []);
+
+  const options = { fetchClientSecret };
+
+  return (
+    <div id="checkout">
+      <EmbeddedCheckoutProvider stripe={stripePromise} options={options}>
+        <EmbeddedCheckout />
+      </EmbeddedCheckoutProvider>
+    </div>
+  );
+};
+
 export default function ConfirmationPage() {
+  const location = useLocation();
+  const bookingDetails = location.state.bookingData;
+  console.log(bookingDetails, "bookingDetails");
   //   const router = useRouter();
   //   const [paymentMethod, setPaymentMethod] = useState("credit_card"); // Kept this line
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
@@ -39,28 +62,28 @@ export default function ConfirmationPage() {
   //     setPaymentMethod(value);
   //   };
 
-  //   const handleConfirmBooking = async () => {
-  //     const stripe = await stripePromise;
-  //     const response = await fetch("/api/create-checkout-session", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         price: bookingDetails.room.pricePerSlot,
-  //         roomName: bookingDetails.room.name,
-  //       }),
-  //     });
+  const handleConfirmBooking = async () => {
+    //   const stripe = await stripePromise;
+    //   const response = await fetch("/api/create-checkout-session", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //       price: bookingDetails.room.pricePerSlot,
+    //       roomName: bookingDetails.room.name,
+    //     }),
+    //   });
 
-  //     const { sessionId } = await response.json();
-  //     const result = await stripe!.redirectToCheckout({ sessionId });
+    //   const { sessionId } = await response.json();
+    //   const result = await stripe!.redirectToCheckout({ sessionId });
 
-  //     if (result.error) {
-  //       console.error(result.error.message);
-  //     } else {
-  //       setIsConfirmationModalOpen(true);
-  //     }
-  //   };
+    //   if (result.error) {
+    //     console.error(result.error.message);
+    //   } else {
+    setIsConfirmationModalOpen(true);
+    //   }
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -88,25 +111,25 @@ export default function ConfirmationPage() {
             <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium text-gray-500">Time</dt>
               <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                {bookingDetails.slot.startTime} - {bookingDetails.slot.endTime}
+                {bookingDetails.timeSlot}
               </dd>
             </div>
             <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium text-gray-500">Name</dt>
               <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                {bookingDetails.userInfo.name}
+                {bookingDetails.name}
               </dd>
             </div>
             <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium text-gray-500">Email</dt>
               <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                {bookingDetails.userInfo.email}
+                {bookingDetails.email}
               </dd>
             </div>
             <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium text-gray-500">Phone</dt>
               <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                {bookingDetails.userInfo.phone}
+                {bookingDetails.phone}
               </dd>
             </div>
             <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -131,10 +154,8 @@ export default function ConfirmationPage() {
           </div>
         </RadioGroup>
       </div> */}
-      <AnimatedButton
-        //    onClick={handleConfirmBooking}
-        className="w-full"
-      >
+      <App/>
+      <AnimatedButton onClick={handleConfirmBooking} className="w-full">
         Confirm and Pay
       </AnimatedButton>
       <Dialog
@@ -146,7 +167,7 @@ export default function ConfirmationPage() {
             <DialogTitle>Booking Confirmed</DialogTitle>
             <DialogDescription>
               Thank you for your booking. We've sent a confirmation email to{" "}
-              {bookingDetails.userInfo.email}.
+              {/* {bookingDetails.userInfo.email}. */}
             </DialogDescription>
           </DialogHeader>
           <AnimatedButton
