@@ -11,6 +11,8 @@ import AdminDashboard from "@/pages/Dashboard";
 import RoomDetails from "@/pages/RoomDetails";
 import MeetingRooms from "@/pages/MeetingsRooms";
 import ProtectedRoute from "@/components/layout/ProtectedRoute";
+import Booking from "@/pages/Booking";
+import ConfirmationPage from "@/pages/Confirmatin";
 
 export const router = createBrowserRouter([
   {
@@ -47,6 +49,22 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <MyBookings />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/booking/:roomId",
+        element: (
+          <ProtectedRoute>
+            <Booking />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/booking/:roomId/confirmation",
+        element: (
+          <ProtectedRoute>
+            <ConfirmationPage />
           </ProtectedRoute>
         ),
       },

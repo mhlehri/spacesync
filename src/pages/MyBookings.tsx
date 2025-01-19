@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table";
 import { useGetAllMyBookingsQuery } from "@/redux/features/bookings/bookings";
 import { selectCurrentUser } from "@/redux/store";
-import { Booking } from "@/types/booking";
+import { TBooking } from "@/types/booking";
 
 export default function MyBookings() {
   const user = selectCurrentUser();
@@ -29,7 +29,7 @@ export default function MyBookings() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data?.data.map((booking: Booking) => (
+          {data?.data.map((booking: TBooking) => (
             <TableRow key={booking._id}>
               <TableCell>{booking.room.name}</TableCell>
               <TableCell>{booking.date.toLocaleString()}</TableCell>

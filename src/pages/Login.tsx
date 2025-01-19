@@ -1,13 +1,14 @@
+import { useLoginMutation } from "@/redux/features/auth/authApi";
+import { setUser } from "@/redux/features/auth/authSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
+import { selectCurrentToken } from "@/redux/store";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import { AnimatedButton } from "../components/AnimatedButton";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
-import { toast } from "sonner";
-import { useLoginMutation } from "@/redux/features/auth/authApi";
-import { useAppDispatch } from "@/redux/hook";
-import { setUser } from "@/redux/features/auth/authSlice";
 
 type LoginFormData = {
   email: string;
@@ -22,6 +23,7 @@ export default function Login() {
   } = useForm<LoginFormData>();
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const token = useAppSelector(selectCurrentToken);
   const location = useLocation();
 
   const [login, { data: MData }] = useLoginMutation();
@@ -52,6 +54,9 @@ export default function Login() {
     }
   };
 
+  if (token) {
+    return <Navigate to="/" replace />;
+  }
   return (
     <div className="flex justify-center items-center min-h-[80vh]">
       <div className="max-w-md w-full p-6 bg-white rounded-lg shadow-xl">

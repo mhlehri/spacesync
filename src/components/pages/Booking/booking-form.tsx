@@ -1,133 +1,213 @@
-"use client";
-
-import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
-import { Calendar } from "@/components/ui/calendar";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { TimeSlot, User } from "@/types/booking";
+import { CalendarIcon } from "lucide-react";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 
-// Mock available time slots
-const mockTimeSlots: TimeSlot[] = [
-  { start: "09:00", end: "10:00", isBooked: false },
-  { start: "10:00", end: "11:00", isBooked: false },
-  { start: "11:00", end: "12:00", isBooked: true },
-  { start: "13:00", end: "14:00", isBooked: false },
-  { start: "14:00", end: "15:00", isBooked: false },
-  { start: "15:00", end: "16:00", isBooked: false },
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { cn } from "@/lib/utils";
+
+import { Input } from "@/components/ui/input";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+const formSchema = z.object({
+  date: z.date({
+    required_error: "A date is required.",
+  }),
+  timeSlot: z.string({
+    required_error: "Please select a time slot.",
+  }),
+  name: z.string().min(2, {
+    message: "Name must be at least 2 characters.",
+  }),
+  email: z.string().email({
+    message: "Please enter a valid email address.",
+  }),
+  phone: z.string().min(10, {
+    message: "Phone number must be at least 10 digits.",
+  }),
+});
+
+const timeSlots = [
+  "09:00 - 10:00",
+  "10:00 - 11:00",
+  "11:00 - 12:00",
+  "13:00 - 14:00",
+  "14:00 - 15:00",
+  "15:00 - 16:00",
+  "16:00 - 17:00",
 ];
 
-// Mock user data (in a real app, this would come from your auth system)
-const mockUser: User = {
-  id: "1",
-  name: "John Doe",
-  email: "john@example.com",
-  phone: "123-456-7890",
-};
-
-interface BookingFormProps {
-  roomId: string;
-  onBookingSubmit: (booking: any) => void;
-}
-
-export function BookingForm({ roomId, onBookingSubmit }: BookingFormProps) {
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
-    new Date()
-  );
-  const [selectedTimeSlot, setSelectedTimeSlot] = useState<TimeSlot | null>(
-    null
-  );
-  const [user, setUser] = useState<User>(mockUser);
-
-  const handleDateSelect = (date: Date | undefined) => {
-    setSelectedDate(date);
-    setSelectedTimeSlot(null);
-  };
-
-  const handleTimeSlotSelect = (timeSlot: TimeSlot) => {
-    setSelectedTimeSlot(timeSlot);
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (selectedDate && selectedTimeSlot) {
-      onBookingSubmit({
-        roomId,
-        userId: user.id,
-        date: format(selectedDate, "yyyy-MM-dd"),
-        timeSlot: selectedTimeSlot,
-        user,
-      });
-    }
-  };
+export function BookingForm({
+  onSubmit,
+  user,
+}: {
+  onSubmit: (data: z.infer<typeof formSchema>) => void;
+  user: { name: string; email: string; phone: string };
+}) {
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+  });
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div>
-        <Label>Select Date</Label>
-        <Calendar
-          mode="single"
-          selected={selectedDate}
-          onSelect={handleDateSelect}
-          className="rounded-md border"
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <FormField
+          control={form.control}
+          name="date"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>Date</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "w-[240px] pl-3 text-left font-normal",
+                        !field.value && "text-muted-foreground"
+                      )}
+                    >
+                      {field.value ? (
+                        format(field.value, "PPP")
+                      ) : (
+                        <span>Pick a date</span>
+                      )}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={field.value}
+                    onSelect={field.onChange}
+                    disabled={(date) =>
+                      date < new Date() ||
+                      date >
+                        new Date(new Date().setMonth(new Date().getMonth() + 2))
+                    }
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+              <FormDescription>
+                Select your preferred booking date.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-      </div>
-
-      {selectedDate && (
-        <div>
-          <Label>Available Time Slots</Label>
-          <div className="grid grid-cols-2 gap-2 mt-2">
-            {mockTimeSlots.map((slot, index) => (
-              <Button
-                key={index}
-                type="button"
-                variant={selectedTimeSlot === slot ? "default" : "outline"}
-                onClick={() => handleTimeSlotSelect(slot)}
-                disabled={slot.isBooked}
-              >
-                {slot.start} - {slot.end}
-              </Button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      <div className="space-y-4">
-        <div>
-          <Label htmlFor="name">Name</Label>
-          <Input
-            id="name"
-            value={user.name}
-            onChange={(e) => setUser({ ...user, name: e.target.value })}
-            required
-          />
-        </div>
-        <div>
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            type="email"
-            value={user.email}
-            onChange={(e) => setUser({ ...user, email: e.target.value })}
-            required
-          />
-        </div>
-        <div>
-          <Label htmlFor="phone">Phone</Label>
-          <Input
-            id="phone"
-            type="tel"
-            value={user.phone}
-            onChange={(e) => setUser({ ...user, phone: e.target.value })}
-            required
-          />
-        </div>
-      </div>
-
-      <Button type="submit" disabled={!selectedDate || !selectedTimeSlot}>
-        Proceed to Checkout
-      </Button>
-    </form>
+        <FormField
+          control={form.control}
+          name="timeSlot"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Time Slot</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a time slot" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {timeSlots.map((slot) => (
+                    <SelectItem key={slot} value={slot}>
+                      {slot}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormDescription>
+                Choose your preferred time slot.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="John Doe"
+                  defaultValue={user.name}
+                  {...field}
+                />
+              </FormControl>
+              <FormDescription>Enter your full name.</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="john@example.com"
+                  defaultValue={user.email}
+                  {...field}
+                />
+              </FormControl>
+              <FormDescription>Enter your email address.</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="phone"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Phone</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="1234567890"
+                  defaultValue={user.phone}
+                  {...field}
+                />
+              </FormControl>
+              <FormDescription>Enter your phone number.</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button
+          disabled={form.formState.isLoading}
+          type="submit"
+          className="bg-indigo-500 hover:bg-indigo-600"
+        >
+          {form.formState.isLoading ? "Submitting.." : "Submit Booking"}
+        </Button>
+      </form>
+    </Form>
   );
 }

@@ -6,16 +6,26 @@ import { TRoom } from "@/types/room";
 export default function FeaturedRooms() {
   const { data, isLoading } = useGetFeaturedRoomsQuery("");
   const featuredRooms = data?.data;
-  console.log(data);
-  if (isLoading) return <p>Loading...</p>;
+
   return (
     <section className="py-12">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-3xl font-extrabold text-gray-900 mb-8">
           Featured Meeting Rooms
         </h2>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {!isLoading && featuredRooms.length > 0 ? (
+          {isLoading ? (
+            Array.from({ length: 4 }).map((_, index) => (
+              <div key={index} className="animate-pulse">
+                <div className="bg-white shadow rounded-lg p-4">
+                  <div className="h-48 bg-gray-300 rounded-md mb-4"></div>
+                  <div className="h-6 bg-gray-300 rounded-md mb-2"></div>
+                  <div className="h-6 bg-gray-300 rounded-md"></div>
+                </div>
+              </div>
+            ))
+          ) : !isLoading && featuredRooms.length > 0 ? (
             featuredRooms?.map((room: TRoom) => (
               <RoomCard key={room._id} room={room} />
             ))

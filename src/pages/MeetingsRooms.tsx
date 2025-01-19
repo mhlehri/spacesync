@@ -53,11 +53,11 @@ export default function MeetingRooms() {
       }
     }
     // Apply sorting
-    if (sortOrder === "asc") {
-      filteredRooms.sort((a, b) => a.pricePerSlot - b.pricePerSlot);
-    } else if (sortOrder === "desc") {
-      filteredRooms.sort((a, b) => b.pricePerSlot - a.pricePerSlot);
-    }
+    // if (sortOrder === "asc") {
+    //   filteredRooms.sort((a, b) => a.pricePerSlot - b.pricePerSlot);
+    // } else if (sortOrder === "desc") {
+    //   filteredRooms.sort((a, b) => b.pricePerSlot - a.pricePerSlot);
+    // }
 
     setRooms(filteredRooms);
     setCurrentPage(1);
