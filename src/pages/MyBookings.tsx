@@ -1,5 +1,3 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -9,38 +7,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useGetAllRoomsQuery } from "@/redux/features/rooms/rooms";
 import { useGetAllMyBookingsQuery } from "@/redux/features/bookings/bookings";
 import { selectCurrentUser } from "@/redux/store";
 import { Booking } from "@/types/booking";
 
-// This would typically come from an API or database
-const initialBookings = [
-  {
-    id: 1,
-    roomName: "Executive Suite",
-    date: new Date("2023-07-15T09:00:00"),
-    status: "Confirmed",
-  },
-  {
-    id: 2,
-    roomName: "Brainstorm Hub",
-    date: new Date("2023-07-20T14:00:00"),
-    status: "Unconfirmed",
-  },
-  // ... more bookings
-];
-
 export default function MyBookings() {
   const user = selectCurrentUser();
-  const { data, isError } = useGetAllMyBookingsQuery(user?._id as string);
+  const { data } = useGetAllMyBookingsQuery(user?._id as string);
   console.log("my bookings data =>", data);
-  const [bookings, setBookings] = useState(initialBookings);
-
-  const handleCancelBooking = (bookingId: number) => {
-    // Here you would typically send a request to your backend to cancel the booking
-    setBookings(bookings.filter((booking) => booking.id !== bookingId));
-  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

@@ -3,7 +3,7 @@ import { baseApi } from "@/redux/api/baseApi";
 const bookingsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllMyBookings: builder.query({
-      query: (id) => `my-bookings`,
+      query: () => `my-bookings`,
     }),
   }),
 });

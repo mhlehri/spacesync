@@ -10,9 +10,16 @@ export const roomApi = baseApi.injectEndpoints({
     getRoomById: builder.query({
       query: (_id) => `rooms/${_id}`,
     }),
+    getFeaturedRooms: builder.query({
+      query: () => `rooms/featured`,
+    }),
   }),
 });
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetAllRoomsQuery, useGetRoomByIdQuery } = roomApi;
+export const {
+  useGetAllRoomsQuery,
+  useGetRoomByIdQuery,
+  useGetFeaturedRoomsQuery,
+} = roomApi;

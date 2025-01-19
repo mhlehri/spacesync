@@ -80,7 +80,7 @@ export default function MeetingRooms() {
   if (isError) return <div>Error fetching data</div>;
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="max-w-7xl mx-auto px-4 py-8">
       <h1 className="text-4xl font-bold mb-8">Meeting Rooms</h1>
 
       <div className="mb-6 space-y-4">
