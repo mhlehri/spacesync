@@ -1,16 +1,10 @@
 "use client";
 
 import { AnimatedButton } from "@/components/AnimatedButton";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 // import { loadStripe } from "@stripe/stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 // This would typically come from the previous page's form submission
 
@@ -18,71 +12,120 @@ import { useLocation } from "react-router-dom";
 //   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 // );
 
-import * as React from "react";
-import { loadStripe } from "@stripe/stripe-js";
+import { useToast } from "@/hooks/use-toast";
+import { useAddBookingMutation } from "@/redux/features/bookings/bookings";
 import {
-  EmbeddedCheckoutProvider,
-  EmbeddedCheckout,
+  CardElement,
+  Elements,
+  useElements,
+  useStripe,
 } from "@stripe/react-stripe-js";
+import { format } from "date-fns";
+import * as React from "react";
+import { toast } from "sonner";
 
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
-const stripePromise = loadStripe("pk_test_123");
+const Stripe_PK = import.meta.env.VITE_STRIPE_PK;
 
-const App = () => {
-  const fetchClientSecret = React.useCallback(() => {
-    // Create a Checkout Session
-    return fetch("/create-checkout-session", {
+const stripePromise = loadStripe(Stripe_PK);
+
+function Form() {
+  const [error, setError] = useState(null);
+  const [clientSecret, setClientSecret] = useState("");
+  const [transactionId, setTransactionId] = useState("");
+
+  const navigate = useNavigate();
+
+  const elements = useElements();
+  const stripe = useStripe();
+
+  React.useEffect(() => {
+    fetch("http://localhost:5000/create-checkout-session", {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ price: 100 }),
     })
       .then((res) => res.json())
-      .then((data) => data.clientSecret);
+      .then((data) => {
+        // console.log(data);
+        setClientSecret(data.clientSecret);
+      });
   }, []);
 
-  const options = { fetchClientSecret };
-
-  return (
-    <div id="checkout">
-      <EmbeddedCheckoutProvider stripe={stripePromise} options={options}>
-        <EmbeddedCheckout />
-      </EmbeddedCheckoutProvider>
-    </div>
-  );
-};
-
-export default function ConfirmationPage() {
   const location = useLocation();
   const bookingDetails = location.state.bookingData;
-  console.log(bookingDetails, "bookingDetails");
-  //   const router = useRouter();
-  //   const [paymentMethod, setPaymentMethod] = useState("credit_card"); // Kept this line
-  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
+  //   console.log(bookingDetails, "bookingDetails");
+  const bookingData = {
+    room: bookingDetails.room._id,
+    date: format(bookingDetails.date, "yyyy-MM-dd"),
+    user: bookingDetails.user._id,
+    slots: [bookingDetails.slot],
+  };
+  const { toast: t } = useToast();
+  console.log(bookingData, "bookingData");
 
-  //   const handlePaymentMethodChange = (value: string) => {
-  //     setPaymentMethod(value);
-  //   };
+  const [addBooking, { isError }] = useAddBookingMutation();
 
-  const handleConfirmBooking = async () => {
-    //   const stripe = await stripePromise;
-    //   const response = await fetch("/api/create-checkout-session", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({
-    //       price: bookingDetails.room.pricePerSlot,
-    //       roomName: bookingDetails.room.name,
-    //     }),
-    //   });
+  const handleConfirmBooking = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    if (!stripe || !elements) {
+      return;
+    }
+    const card = elements.getElement(CardElement);
+    if (card == null) {
+      return;
+    }
 
-    //   const { sessionId } = await response.json();
-    //   const result = await stripe!.redirectToCheckout({ sessionId });
+    const { error } = await stripe.createPaymentMethod({
+      type: "card",
+      card,
+    });
 
-    //   if (result.error) {
-    //     console.error(result.error.message);
-    //   } else {
-    setIsConfirmationModalOpen(true);
-    //   }
+    if (error) {
+      setError(error.message);
+    } else {
+      setError("");
+    }
+    //? confirm Payment
+    const { paymentIntent, error: confirmError } =
+      await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: card,
+          billing_details: {
+            email: bookingDetails?.user?.email || "anonymous",
+            name: bookingDetails?.user?.name || "anonymous",
+          },
+        },
+      });
+    if (confirmError) {
+      console.log("confirm error", confirmError);
+      toast.error("Payment Failed", {
+        description: confirmError.message,
+        richColors: true,
+      });
+    } else {
+      if (paymentIntent.status == "succeeded") {
+        const res = await addBooking(bookingData);
+        if (isError || res?.error) {
+          toast.error("Booking Failed", {
+            description: "Please try again later",
+            richColors: true,
+          });
+        } else if (res.data || !isError) {
+          t({
+            title: "Booking Confirmed",
+
+            description:
+              "Thank you for your booking. We've sent a confirmation email to your email address.",
+          });
+          setTransactionId(paymentIntent.id);
+          navigate("/my-bookings", { replace: true });
+        }
+      }
+    }
   };
 
   return (
@@ -141,42 +184,40 @@ export default function ConfirmationPage() {
           </dl>
         </div>
       </div>
-      {/* <div className="mb-8">
+      <div className="mb-8">
         <h2 className="text-xl font-semibold mb-4">Select Payment Method</h2>
-        <RadioGroup value={paymentMethod} onValueChange={handlePaymentMethodChange}>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="credit_card" id="credit_card" />
-            <Label htmlFor="credit_card">Credit Card</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="paypal" id="paypal" />
-            <Label htmlFor="paypal">PayPal</Label>
-          </div>
-        </RadioGroup>
-      </div> */}
-      <App/>
+
+        <div className="border border-gray-200 rounded-lg p-4">
+          <CardElement
+            options={{
+              style: {
+                base: {
+                  fontSize: "20px",
+                  color: "#424770",
+                  "::placeholder": {
+                    color: "#aab7c4",
+                  },
+                },
+                invalid: {
+                  color: "#9e2146",
+                },
+              },
+            }}
+          />
+        </div>
+      </div>
+
       <AnimatedButton onClick={handleConfirmBooking} className="w-full">
         Confirm and Pay
       </AnimatedButton>
-      <Dialog
-        open={isConfirmationModalOpen}
-        onOpenChange={setIsConfirmationModalOpen}
-      >
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Booking Confirmed</DialogTitle>
-            <DialogDescription>
-              Thank you for your booking. We've sent a confirmation email to{" "}
-              {/* {bookingDetails.userInfo.email}. */}
-            </DialogDescription>
-          </DialogHeader>
-          <AnimatedButton
-          //    onClick={() => router.push("/")}
-          >
-            Return to Home
-          </AnimatedButton>
-        </DialogContent>
-      </Dialog>
     </div>
+  );
+}
+
+export default function ConfirmationPage() {
+  return (
+    <Elements stripe={stripePromise}>
+      <Form />
+    </Elements>
   );
 }

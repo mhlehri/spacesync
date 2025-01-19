@@ -8,7 +8,7 @@ import {
 import { logout } from "@/redux/features/auth/authSlice";
 import { useAppDispatch } from "@/redux/hook";
 import { selectCurrentToken, selectCurrentUser } from "@/redux/store";
-import { Menu, User, X } from "lucide-react";
+import { Menu, User, User2, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
@@ -83,14 +83,18 @@ export default function Navbar() {
                   >
                     <Avatar className="h-8 w-8">
                       <AvatarImage src="/avatars/01.png" alt="@username" />
-                      <AvatarFallback>U</AvatarFallback>
+                      <AvatarFallback>
+                        <User2 />
+                      </AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56" align="end" forceMount>
-                  <DropdownMenuItem asChild>
-                    <Link to="/my-bookings">My Bookings</Link>
-                  </DropdownMenuItem>
+                  {!user.isAdmin && (
+                    <DropdownMenuItem asChild>
+                      <Link to="/my-bookings">My Bookings</Link>
+                    </DropdownMenuItem>
+                  )}
                   {user.isAdmin && (
                     <DropdownMenuItem asChild>
                       <Link to="/admin/dashboard">Dashboard</Link>

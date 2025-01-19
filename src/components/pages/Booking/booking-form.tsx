@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { format } from "date-fns";
+import { format, set } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -53,9 +53,11 @@ const formSchema = z.object({
 
 export function BookingForm({
   onSubmit,
+  setSlot,
   roomId,
   user,
 }: {
+  setSlot: (slot: string) => void;
   onSubmit: (data: z.infer<typeof formSchema>) => void;
   user: { name: string; email: string; phone: string };
   roomId: string;
@@ -79,6 +81,7 @@ export function BookingForm({
     roomId,
   });
 
+  console.log(availableSlots);
   console.log(date);
   // console.log(availableSlots?.data);
   useEffect(() => {
@@ -131,6 +134,7 @@ export function BookingForm({
                           format(date, "yyyy-MM-dd")
                       ) {
                         field.onChange(selectedDate);
+
                         setDate(selectedDate);
                       }
                     }}
@@ -157,7 +161,16 @@ export function BookingForm({
           render={({ field }) => (
             <FormItem>
               <FormLabel>Time Slot</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select
+                onValueChange={(value) => {
+                  const selectedSlot = availableSlots?.data?.find(
+                    (slot) => `${slot.startTime} - ${slot.endTime}` === value
+                  );
+                  field.onChange(value);
+                  setSlot(selectedSlot?._id);
+                }}
+                defaultValue={field.value}
+              >
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select a time slot" />

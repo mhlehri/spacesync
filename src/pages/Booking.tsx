@@ -10,18 +10,23 @@ import {
 } from "@/components/ui/card";
 import { useAppSelector } from "@/redux/hook";
 import { selectCurrentUser } from "@/redux/store";
+import { useState } from "react";
 
 export default function Booking() {
   const user = useAppSelector(selectCurrentUser);
   const navigate = useNavigate();
   const location = useLocation();
   const { room } = location.state;
-
+  const [slot, setSlot] = useState("");
   const handleBookingSubmit = (data: any) => {
     // In a real application, you would send this data to your backend
-    console.log("Booking submitted:", { roomId: room._id, ...data });
+    console.log("Booking submitted:", {
+      roomId: room._id,
+      ...data,
+      user: user?._id,
+    });
     // Navigate to the confirmation page
-    const bookingData = { room, ...data };
+    const bookingData = { room, ...data, user: user, slot: slot };
     navigate(`/booking/${room._id}/confirmation`, {
       state: { bookingData },
     });
@@ -52,6 +57,7 @@ export default function Booking() {
             <p>Price per slot: ${room.pricePerSlot}</p>
           </div>
           <BookingForm
+            setSlot={setSlot}
             roomId={room._id}
             user={userData}
             onSubmit={handleBookingSubmit}
