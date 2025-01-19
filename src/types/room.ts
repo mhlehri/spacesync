@@ -1,7 +1,10 @@
-export interface Room {
+export type TRoom = {
   _id: string;
   name: string;
+  roomNo: number;
+  floorNo: number;
   capacity: number;
   pricePerSlot: number;
-  image: string;
-}
+  amenities: string[];
+  isDeleted: boolean;
+};

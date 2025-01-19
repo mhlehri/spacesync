@@ -10,14 +10,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Room } from "@/types/room";
+import { TRoom } from "@/types/room";
 import { RoomCard } from "@/components/pages/Room/room-card";
 import { useGetAllRoomsQuery } from "@/redux/features/rooms/rooms";
 
 export default function MeetingRooms() {
   const { data, isError, isLoading } = useGetAllRoomsQuery("");
   const roomsData = useMemo(() => data?.data || [], [data]);
-  const [rooms, setRooms] = useState<Room[]>(roomsData);
+  const [rooms, setRooms] = useState<TRoom[]>(roomsData);
   const [searchTerm, setSearchTerm] = useState("");
   const [capacityFilter, setCapacityFilter] = useState("");
   const [priceFilter, setPriceFilter] = useState("");
@@ -30,7 +30,7 @@ export default function MeetingRooms() {
 
     // Apply search filter
     if (searchTerm) {
-      filteredRooms = filteredRooms.filter((room: Room) =>
+      filteredRooms = filteredRooms.filter((room: TRoom) =>
         room.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
@@ -38,7 +38,7 @@ export default function MeetingRooms() {
     // Apply capacity filter
     if (capacityFilter) {
       filteredRooms = filteredRooms.filter(
-        (room: Room) => room.capacity >= parseInt(capacityFilter)
+        (room: TRoom) => room.capacity >= parseInt(capacityFilter)
       );
     }
 
@@ -46,7 +46,7 @@ export default function MeetingRooms() {
     if (priceFilter) {
       if (priceFilter !== "0") {
         filteredRooms = filteredRooms.filter(
-          (room: Room) => room.pricePerSlot <= parseInt(priceFilter)
+          (room: TRoom) => room.pricePerSlot <= parseInt(priceFilter)
         );
       } else {
         return filteredRooms;

@@ -12,6 +12,7 @@ import {
 import { useGetAllRoomsQuery } from "@/redux/features/rooms/rooms";
 import { useGetAllMyBookingsQuery } from "@/redux/features/bookings/bookings";
 import { selectCurrentUser } from "@/redux/store";
+import { Booking } from "@/types/booking";
 
 // This would typically come from an API or database
 const initialBookings = [
@@ -51,24 +52,14 @@ export default function MyBookings() {
             <TableHead>Room Name</TableHead>
             <TableHead>Date & Time</TableHead>
             <TableHead>Status</TableHead>
-            <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data?.data.map((booking) => (
+          {data?.data.map((booking: Booking) => (
             <TableRow key={booking._id}>
               <TableCell>{booking.room.name}</TableCell>
               <TableCell>{booking.date.toLocaleString()}</TableCell>
               <TableCell>{booking.isConfirmed}</TableCell>
-              <TableCell>
-                <Button
-                  variant="destructive"
-                  size="sm"
-                  onClick={() => handleCancelBooking(booking.id)}
-                >
-                  Cancel
-                </Button>
-              </TableCell>
             </TableRow>
           ))}
         </TableBody>

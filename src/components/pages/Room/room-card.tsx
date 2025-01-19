@@ -1,10 +1,10 @@
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Room } from "@/types/room";
+import { TRoom } from "@/types/room";
 import { Link } from "react-router-dom";
 
 interface RoomCardProps {
-  room: Room;
+  room: TRoom;
 }
 
 export function RoomCard({ room }: RoomCardProps) {
