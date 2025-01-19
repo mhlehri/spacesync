@@ -19,7 +19,10 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGetAllBookingsQuery } from "@/redux/features/bookings/bookings";
-import { useGetAllRoomsQuery } from "@/redux/features/rooms/rooms";
+import {
+  useDeleteRoomByIdMutation,
+  useGetAllRoomsQuery,
+} from "@/redux/features/rooms/rooms";
 import { useGetAllSlotsQuery } from "@/redux/features/slots/slotsApi";
 import { TBooking } from "@/types/booking";
 import { TRoom } from "@/types/room";
@@ -66,14 +69,20 @@ import { useState } from "react";
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("rooms");
+
+  //? Use the useGetAllRoomsQuery hook to fetch all rooms
   const { data: roomsData, isLoading } = useGetAllRoomsQuery("");
+  //? Use the useGetAllSlotsQuery hook to fetch all slots
   const { data: slotsData, isLoading: slotsIsloading } =
     useGetAllSlotsQuery("");
+  //? Use the useGetAllBookingsQuery hook to fetch all bookings
   const { data: bookingsData, isLoading: bookingsIsloading } =
     useGetAllBookingsQuery("");
   const rooms = roomsData?.data || [];
   const slots = slotsData?.data || [];
   const bookings = bookingsData?.data || [];
+
+  const [deleteRoom] = useDeleteRoomByIdMutation();
   console.log(bookings);
   const renderContent = () => {
     switch (activeTab) {
@@ -155,7 +164,13 @@ export default function AdminDashboard() {
                           <Button variant="outline" size="sm" className="mr-2">
                             Update
                           </Button>
-                          <Button variant="destructive" size="sm">
+                          <Button
+                            onClick={async () => {
+                              await deleteRoom(room._id);
+                            }}
+                            variant="destructive"
+                            size="sm"
+                          >
                             Delete
                           </Button>
                         </TableCell>

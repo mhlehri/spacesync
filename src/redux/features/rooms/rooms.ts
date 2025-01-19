@@ -13,6 +13,13 @@ export const roomApi = baseApi.injectEndpoints({
     getFeaturedRooms: builder.query({
       query: () => `rooms/featured`,
     }),
+    deleteRoomById: builder.mutation({
+      query: (id) => ({
+        url: `rooms/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Room"],
+    }),
   }),
 });
 
@@ -22,4 +29,5 @@ export const {
   useGetAllRoomsQuery,
   useGetRoomByIdQuery,
   useGetFeaturedRoomsQuery,
+  useDeleteRoomByIdMutation,
 } = roomApi;
