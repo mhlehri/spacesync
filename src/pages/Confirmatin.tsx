@@ -40,7 +40,7 @@ function Form() {
   const stripe = useStripe();
 
   React.useEffect(() => {
-    fetch("http://localhost:5000/create-checkout-session", {
+    fetch("https://meetspacemanager.vercel.app/create-checkout-session", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

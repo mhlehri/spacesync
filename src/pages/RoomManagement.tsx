@@ -31,7 +31,7 @@ export default function RoomManagement() {
   //? Use the useGetAllRoomsQuery hook to fetch all rooms
   const { data: roomsData, isLoading } = useGetAllRoomsQuery("");
 
-  const rooms = roomsData?.data || [];
+  const rooms = roomsData?.data?.rooms || [];
 
   //? Use the useDeleteRoomByIdMutation hook to delete a room
   const [deleteRoom] = useDeleteRoomByIdMutation();

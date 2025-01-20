@@ -1,4 +1,3 @@
-import React from "react";
 import CreateSlotForm from "./CreateSlotForm";
 
 export default function CreateSlot() {

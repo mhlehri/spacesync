@@ -5,7 +5,24 @@ import { baseApi } from "@/redux/api/baseApi";
 export const roomApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllRooms: builder.query({
-      query: () => `rooms`,
+      query: ({
+        searchTerm,
+        capacityFilter,
+        priceFilter,
+        sortOrder,
+        currentPage,
+        roomsPerPage,
+      }) => ({
+        url: `rooms`,
+        params: {
+          searchTerm,
+          capacityFilter,
+          priceFilter,
+          sortOrder,
+          currentPage,
+          roomsPerPage,
+        },
+      }),
       providesTags: ["Room"],
     }),
     getRoomById: builder.query({

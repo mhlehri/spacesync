@@ -6,6 +6,7 @@ import Booking from "@/pages/Booking";
 import BookingManagement from "@/pages/BookingManagement";
 import ConfirmationPage from "@/pages/Confirmatin";
 import Contact from "@/pages/Contact";
+import CreateSlot from "@/pages/CreateSlot";
 import Dashboard from "@/pages/Dashboard";
 import Error from "@/pages/Error";
 import Login from "@/pages/Login";
@@ -15,11 +16,11 @@ import RoomDetails from "@/pages/RoomDetails";
 import RoomManagement from "@/pages/RoomManagement";
 import SignUp from "@/pages/SignUp";
 import SlotManagement from "@/pages/SlotManagement";
+import UpdateRoom from "@/pages/UpdateRoom";
 import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "../MainLayout";
 import Home from "../pages/Home";
-import CreateSlot from "@/pages/CreateSlot";
-import UpdateRoom from "@/pages/UpdateRoom";
+import AdminRoute from "@/components/layout/AdminRoute";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -88,9 +89,9 @@ export const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: (
-      <ProtectedRoute>
+      <AdminRoute>
         <AdminDashboardLayout />
-      </ProtectedRoute>
+      </AdminRoute>
     ),
     children: [
       {

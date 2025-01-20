@@ -1,8 +1,6 @@
-"use client";
-
-import { useState, useEffect, useMemo } from "react";
-import { Input } from "@/components/ui/input";
+import { RoomCard } from "@/components/pages/Room/room-card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -10,58 +8,33 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { TRoom } from "@/types/room";
-import { RoomCard } from "@/components/pages/Room/room-card";
+import { useDebounce } from "@/hooks/use-debounce";
 import { useGetAllRoomsQuery } from "@/redux/features/rooms/roomsApi";
+import { TRoom } from "@/types/room";
+import { useMemo, useState } from "react";
 
 export default function MeetingRooms() {
-  const { data, isError, isLoading } = useGetAllRoomsQuery("");
-  const roomsData = useMemo(() => data?.data || [], [data]);
-  const [rooms, setRooms] = useState<TRoom[]>(roomsData);
+  // State for search and filters
   const [searchTerm, setSearchTerm] = useState("");
+  const debounce = useDebounce(searchTerm, 500);
   const [capacityFilter, setCapacityFilter] = useState("");
   const [priceFilter, setPriceFilter] = useState("");
   const [sortOrder, setSortOrder] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const roomsPerPage = 6;
+  const roomsPerPage = 8;
 
-  useEffect(() => {
-    let filteredRooms = roomsData;
-
-    // Apply search filter
-    if (searchTerm) {
-      filteredRooms = filteredRooms.filter((room: TRoom) =>
-        room.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-
-    // Apply capacity filter
-    if (capacityFilter) {
-      filteredRooms = filteredRooms.filter(
-        (room: TRoom) => room.capacity >= parseInt(capacityFilter)
-      );
-    }
-
-    // Apply price filter
-    if (priceFilter) {
-      if (priceFilter !== "0") {
-        filteredRooms = filteredRooms.filter(
-          (room: TRoom) => room.pricePerSlot <= parseInt(priceFilter)
-        );
-      } else {
-        return filteredRooms;
-      }
-    }
-    // Apply sorting
-    // if (sortOrder === "asc") {
-    //   filteredRooms.sort((a, b) => a.pricePerSlot - b.pricePerSlot);
-    // } else if (sortOrder === "desc") {
-    //   filteredRooms.sort((a, b) => b.pricePerSlot - a.pricePerSlot);
-    // }
-
-    setRooms(filteredRooms);
-    setCurrentPage(1);
-  }, [searchTerm, capacityFilter, priceFilter, sortOrder, roomsData]);
+  // Get filtered room data from API based on state variables
+  const { data, isLoading } = useGetAllRoomsQuery({
+    searchTerm: debounce,
+    capacityFilter,
+    priceFilter,
+    sortOrder,
+    currentPage,
+    roomsPerPage,
+  });
+  console.log(data);
+  const roomsData = useMemo(() => data?.data?.rooms || [], [data]);
+  const totalRooms = useMemo(() => data?.data?.total || 0, [data]);
 
   const clearFilters = () => {
     setSearchTerm("");
@@ -71,13 +44,9 @@ export default function MeetingRooms() {
   };
 
   // Pagination
-  const indexOfLastRoom = currentPage * roomsPerPage;
-  const indexOfFirstRoom = indexOfLastRoom - roomsPerPage;
-  const currentRooms = rooms.slice(indexOfFirstRoom, indexOfLastRoom);
-  const totalPages = Math.ceil(rooms?.length / roomsPerPage);
+  const totalPages = Math.ceil(totalRooms / roomsPerPage);
 
   if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error fetching data</div>;
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
@@ -135,9 +104,23 @@ export default function MeetingRooms() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
-        {currentRooms.map((room) => (
-          <RoomCard key={room._id} room={room} />
-        ))}
+        {isLoading ? (
+          Array.from({ length: 4 }).map((_, index) => (
+            <div key={index} className="animate-pulse">
+              <div className="bg-white shadow rounded-lg p-4">
+                <div className="h-48 bg-gray-300 rounded-md mb-4"></div>
+                <div className="h-6 bg-gray-300 rounded-md mb-2"></div>
+                <div className="h-6 bg-gray-300 rounded-md"></div>
+              </div>
+            </div>
+          ))
+        ) : !isLoading && roomsData?.length > 0 ? (
+          roomsData?.map((room: TRoom) => (
+            <RoomCard key={room._id} room={room} />
+          ))
+        ) : (
+          <p className="text-center text-gray-500">No rooms found</p>
+        )}
       </div>
 
       {totalPages > 1 && (

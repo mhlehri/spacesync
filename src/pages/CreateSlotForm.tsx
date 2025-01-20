@@ -1,11 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { format } from "date-fns";
-import { Button } from "@/components/ui/button";
+import { DButton } from "@/components/AnimatedButton";
 import {
   Form,
   FormControl,
@@ -23,10 +18,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useGetAllRoomsQuery } from "@/redux/features/rooms/roomsApi";
-import { DButton } from "@/components/AnimatedButton";
-import { TRoom } from "@/types/room";
-import { toast } from "sonner";
 import { useCreateSlotMutation } from "@/redux/features/slots/slotsApi";
+import { TRoom } from "@/types/room";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { format } from "date-fns";
+import { useMemo } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import * as z from "zod";
 
 // Define the form schema
 const formSchema = z

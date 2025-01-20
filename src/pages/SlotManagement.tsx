@@ -69,9 +69,6 @@ export default function SlotManagement() {
                     <TableCell>{slot.startTime}</TableCell>
                     <TableCell>{slot.endTime}</TableCell>
                     <TableCell className="flex gap-2 flex-wrap">
-                      <Button variant="outline" size="sm" className="mr-2">
-                        Update
-                      </Button>
                       <Dialog>
                         <DialogTrigger asChild>
                           <Button variant="destructive" size="sm">
