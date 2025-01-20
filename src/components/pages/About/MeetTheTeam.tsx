@@ -6,19 +6,22 @@ export default function MeetTheTeam() {
       name: "Jane Doe",
       role: "CEO & Founder",
       bio: "Jane leads the company with a vision for innovation and excellence.",
-      imageUrl: "https://via.placeholder.com/150?text=Jane",
+      imageUrl:
+        "https://images.unsplash.com/photo-1640960543409-dbe56ccc30e2?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
     {
       name: "John Smith",
       role: "CTO",
       bio: "John oversees all technical aspects, ensuring our products are top-notch.",
-      imageUrl: "https://via.placeholder.com/150?text=John",
+      imageUrl:
+        "https://images.unsplash.com/photo-1630910561339-4e22c7150093?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
     {
       name: "Alice Johnson",
       role: "CMO",
       bio: "Alice drives our marketing strategies and builds strong customer relationships.",
-      imageUrl: "https://via.placeholder.com/150?text=Alice",
+      imageUrl:
+        "https://images.unsplash.com/photo-1640951613773-54706e06851d?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
   ];
 

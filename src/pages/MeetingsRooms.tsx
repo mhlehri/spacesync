@@ -46,7 +46,7 @@ export default function MeetingRooms() {
   // Pagination
   const totalPages = Math.ceil(totalRooms / roomsPerPage);
 
-  if (isLoading) return <div>Loading...</div>;
+  // if (isLoading) return <div>Loading...</div>;
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">

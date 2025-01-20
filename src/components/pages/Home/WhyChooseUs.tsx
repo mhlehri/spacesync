@@ -8,7 +8,7 @@ export default function WhyChooseUs() {
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">
           Why Choose Us?
         </h2>
-        <div className="flex flex-col md:flex-row justify-around items-center">
+        <div className="flex flex-col md:flex-row justify-around items-center gap-3">
           {/* Seamless Booking Experience */}
           <Card className="flex flex-col items-center text-center p-4 max-w-sm">
             <CardHeader>
