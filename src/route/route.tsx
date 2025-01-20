@@ -18,6 +18,8 @@ import SlotManagement from "@/pages/SlotManagement";
 import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "../MainLayout";
 import Home from "../pages/Home";
+import CreateSlot from "@/pages/CreateSlot";
+import UpdateRoom from "@/pages/UpdateRoom";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -100,8 +102,16 @@ export const router = createBrowserRouter([
         element: <RoomManagement />,
       },
       {
-        path: "room-management/add-room",
+        path: "room-management/create-room",
         element: <AddRoom />,
+      },
+      {
+        path: "room-management/update-room/:id",
+        element: <UpdateRoom />,
+      },
+      {
+        path: "slot-management/create-slot",
+        element: <CreateSlot />,
       },
       {
         path: "booking-management",

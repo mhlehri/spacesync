@@ -22,6 +22,22 @@ export const roomApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Room"],
     }),
+    addRoom: builder.mutation({
+      query: (data) => ({
+        url: `rooms`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Room"],
+    }),
+    updateRoom: builder.mutation({
+      query: ({ _id, data }) => ({
+        url: `rooms/${_id}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["Room"],
+    }),
   }),
 });
 
@@ -31,5 +47,7 @@ export const {
   useGetAllRoomsQuery,
   useGetRoomByIdQuery,
   useGetFeaturedRoomsQuery,
+  useAddRoomMutation,
   useDeleteRoomByIdMutation,
+  useUpdateRoomMutation,
 } = roomApi;

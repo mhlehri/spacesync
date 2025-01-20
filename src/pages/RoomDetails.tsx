@@ -23,21 +23,27 @@ export default function RoomDetails() {
         <div>
           <div className="relative h-96 mb-4">
             <img
-              src={"/placeholder.svg"}
+              src={
+                room?.images[0] ||
+                "https://images.unsplash.com/photo-1503418895522-46f9804cda40?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              }
               alt={room.name}
               className="rounded-lg object-cover w-full h-full"
             />
           </div>
           <div className="grid grid-cols-3 gap-4">
-            {/* {room.images.slice(1).map((image, index) => (
-              <div key={index} className="relative h-24">
-                <img
-                  src={image || "/placeholder.svg"}
-                  alt={`${room.name} - Image ${index + 2}`}
-                  className="rounded-lg object-cover w-full h-full"
-                />
-              </div>
-            ))} */}
+            {room.images.slice(1).map(
+              (image: string, index: number) =>
+                image && (
+                  <div key={index} className="relative h-24">
+                    <img
+                      src={image}
+                      alt={`${room.name} - Image ${index + 2}`}
+                      className="rounded-lg object-cover w-full h-full"
+                    />
+                  </div>
+                )
+            )}
           </div>
         </div>
         <div>

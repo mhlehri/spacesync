@@ -24,7 +24,7 @@ import {
   useGetAllRoomsQuery,
 } from "@/redux/features/rooms/roomsApi";
 import { TRoom } from "@/types/room";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 export default function RoomManagement() {
@@ -35,7 +35,7 @@ export default function RoomManagement() {
 
   //? Use the useDeleteRoomByIdMutation hook to delete a room
   const [deleteRoom] = useDeleteRoomByIdMutation();
-
+  const navigate = useNavigate();
   console.log(rooms);
 
   return (
@@ -43,7 +43,7 @@ export default function RoomManagement() {
       <h2 className="text-2xl font-semibold mb-4">Room Management</h2>
 
       <DButton className="mb-4" asChild>
-        <Link to={`add-room`}>Add New Room</Link>
+        <Link to={`create-room`}>Create New Room</Link>
       </DButton>
 
       <div className="h-96 overflow-y-scroll">
@@ -71,7 +71,14 @@ export default function RoomManagement() {
                     <TableCell>{room.capacity}</TableCell>
                     <TableCell>${room.pricePerSlot}</TableCell>
                     <TableCell className="flex gap-2 flex-wrap">
-                      <Button variant="outline" size="sm" className="mr-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="mr-2"
+                        onClick={() => {
+                          navigate(`update-room/${room._id}`);
+                        }}
+                      >
                         Update
                       </Button>
                       <Dialog>

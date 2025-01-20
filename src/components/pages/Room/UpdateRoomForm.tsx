@@ -4,12 +4,16 @@ import { DButton } from "@/components/AnimatedButton";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  useGetRoomByIdQuery,
+  useUpdateRoomMutation,
+} from "@/redux/features/rooms/roomsApi";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import * as z from "zod";
-import { useAddRoomMutation } from "@/redux/features/rooms/roomsApi";
 
 const formSchema = z.object({
   name: z
@@ -52,35 +56,51 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-export default function RoomAddForm() {
+export default function RoomUpdateForm() {
   const [amenities, setAmenities] = useState<string[]>([]);
+  const [updateRoom] = useUpdateRoomMutation();
+  const { id } = useParams();
+  const { data: roomData } = useGetRoomByIdQuery(id as string);
+  const room = roomData?.data;
+
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors, isSubmitting },
+    reset,
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
   });
-
-  const [addRoom] = useAddRoomMutation();
-
+  const navigate = useNavigate();
+  React.useEffect(() => {
+    if (room) {
+      reset({
+        name: room.name || "",
+        roomNo: room.roomNo || 0,
+        floorNo: room.floorNo || 0,
+        capacity: room.capacity || 0,
+        pricePerSlot: room.pricePerSlot || 0,
+        amenities: room.amenities.join(", ") || "",
+        images: room.images || [""],
+      });
+    }
+  }, [room, reset]);
+  console.log(room);
   const onSubmit = async (data: FormData) => {
-    const d = { ...data, amenities };
-    console.log(d);
-    const res = await addRoom(d);
-    // @ts-expect-error - error is not null
-    if ((res?.error?.data as Error)?.message.includes("E11000 duplicate key")) {
-      toast.error("Room already exists. Please add a different roomNo.");
-      return;
-    } else if (res.error) {
-      toast.error("Failed to add room. Please try again");
+    const a = amenities || room?.amenities;
+    const d = { ...data, amenities: a };
+    console.log(d, "submitted");
+    const res = await updateRoom({ data: d, _id: room?._id });
+    if (res.error) {
+      toast.error("Failed to update room. Please try again", {
+        richColors: true,
+      });
     } else if (res?.data?.success) {
       toast.success("Room added successfully", {
         richColors: true,
       });
+      navigate(-1);
       console.log(res.data);
-      reset(); // Reset the form after successful submission
     }
   };
 
@@ -93,7 +113,7 @@ export default function RoomAddForm() {
     <div className="">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <h2 className="text-2xl text-center text-indigo-500 font-bold uppercase underline">
-          Create New Room
+          Update Room
         </h2>
         <div>
           <Label htmlFor="name">Name</Label>
@@ -158,7 +178,7 @@ export default function RoomAddForm() {
         </div>
         <div>
           <Label htmlFor="image1">Image URL 1 (Required)</Label>
-          <Input id="image1" {...register("images.0")} />
+          <Input required id="image1" {...register("images.0")} />
           {errors.images?.[0]?.message && (
             <p className="text-red-500">{errors.images[0]?.message}</p>
           )}
@@ -172,7 +192,7 @@ export default function RoomAddForm() {
           <Input id="image3" {...register("images.2")} />
         </div>
         <DButton disabled={isSubmitting} type="submit" className="w-full">
-          {isSubmitting ? "submitting.." : "Add"}
+          {isSubmitting ? "submitting.." : "update"}
         </DButton>
       </form>
     </div>

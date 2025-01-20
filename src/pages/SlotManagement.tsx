@@ -10,8 +10,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Table,
   TableBody,
@@ -28,6 +26,7 @@ import {
 } from "@/redux/features/slots/slotsApi";
 
 import { TSlot } from "@/types/slot";
+import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
 export default function SlotManagement() {
@@ -42,61 +41,9 @@ export default function SlotManagement() {
   return (
     <div className="py-12">
       <h2 className="text-2xl font-semibold mb-4">Slots Management</h2>
-      <Dialog>
-        <DialogTrigger asChild>
-          <DButton className="mb-4">Add New Slot</DButton>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Add New Slot</DialogTitle>
-          </DialogHeader>
-          <form action="">
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="roomName" className="text-right">
-                  Room Name
-                </Label>
-                <Input required id="roomName" className="col-span-3" />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="roomNo" className="text-right">
-                  Room No.
-                </Label>
-                <Input required id="roomNo" className="col-span-3" />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="date" className="text-right">
-                  Date
-                </Label>
-                <Input required id="date" type="date" className="col-span-3" />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="startTime" className="text-right">
-                  Start Time
-                </Label>
-                <Input
-                  required
-                  id="startTime"
-                  type="time"
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="endTime" className="text-right">
-                  End Time
-                </Label>
-                <Input
-                  required
-                  id="endTime"
-                  type="time"
-                  className="col-span-3"
-                />
-              </div>
-            </div>
-            <Button className="w-full">Add Slot</Button>
-          </form>
-        </DialogContent>
-      </Dialog>
+      <DButton className="mb-4" asChild>
+        <Link to={`create-slot`}>Create New Room</Link>
+      </DButton>
       <div className="h-96 overflow-y-scroll ">
         <Table className="overflow-x-scroll">
           <TableCaption>A list of all slots</TableCaption>

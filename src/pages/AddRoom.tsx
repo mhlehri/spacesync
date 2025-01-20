@@ -2,7 +2,7 @@ import RoomAddForm from "@/components/pages/Room/RoomAddForm";
 
 export default function AddRoom() {
   return (
-    <div className="py-4">
+    <div className="">
       <RoomAddForm />
     </div>
   );
