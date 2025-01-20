@@ -1,9 +1,12 @@
+import AdminDashboardLayout from "@/components/layout/AdminDashboardLayout";
 import ProtectedRoute from "@/components/layout/ProtectedRoute";
 import About from "@/pages/About";
+import AddRoom from "@/pages/AddRoom";
 import Booking from "@/pages/Booking";
 import BookingManagement from "@/pages/BookingManagement";
 import ConfirmationPage from "@/pages/Confirmatin";
 import Contact from "@/pages/Contact";
+import Dashboard from "@/pages/Dashboard";
 import Error from "@/pages/Error";
 import Login from "@/pages/Login";
 import MeetingRooms from "@/pages/MeetingsRooms";
@@ -15,9 +18,6 @@ import SlotManagement from "@/pages/SlotManagement";
 import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "../MainLayout";
 import Home from "../pages/Home";
-import AdminDashboardLayout from "@/components/layout/AdminDashboardLayout";
-import Dashboard from "@/pages/Dashboard";
-
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -72,32 +72,7 @@ export const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
-      {
-        path: "/dashboard",
-        element: (
-          <ProtectedRoute>
-            <AdminDashboardLayout />
-          </ProtectedRoute>
-        ),
-        children: [
-          {
-            path: "/dashboard",
-            element: <Dashboard />,
-          },
-          {
-            path: "room-management",
-            element: <RoomManagement />,
-          },
-          {
-            path: "booking-management",
-            element: <BookingManagement />,
-          },
-          {
-            path: "slot-management",
-            element: <SlotManagement />,
-          },
-        ],
-      },
+
       {
         path: "/meeting-rooms/:id",
         element: (
@@ -105,6 +80,36 @@ export const router = createBrowserRouter([
             <RoomDetails />
           </ProtectedRoute>
         ),
+      },
+    ],
+  },
+  {
+    path: "/dashboard",
+    element: (
+      <ProtectedRoute>
+        <AdminDashboardLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        path: "/dashboard",
+        element: <Dashboard />,
+      },
+      {
+        path: "room-management",
+        element: <RoomManagement />,
+      },
+      {
+        path: "room-management/add-room",
+        element: <AddRoom />,
+      },
+      {
+        path: "booking-management",
+        element: <BookingManagement />,
+      },
+      {
+        path: "slot-management",
+        element: <SlotManagement />,
       },
     ],
   },

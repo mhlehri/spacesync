@@ -40,109 +40,111 @@ export default function BookingManagement() {
   return (
     <div className="py-12">
       <h2 className="text-2xl font-semibold mb-4">Booking Management</h2>
-      <Table>
-        <TableCaption>A list of all bookings</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Room Name</TableHead>
-            <TableHead>User Name</TableHead>
-            <TableHead>Date</TableHead>
-            <TableHead>Time</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {areBookingsLoading
-            ? "loading..."
-            : bookings
-            ? bookings.map((booking: TBooking) => (
-                <TableRow key={booking?._id}>
-                  <TableCell>{booking?.room?.name}</TableCell>
-                  <TableCell>{booking?.user?.name}</TableCell>
-                  <TableCell>{booking?.date}</TableCell>
-                  <TableCell>{booking?.slots[0]?.startTime}</TableCell>
-                  <TableCell>{booking?.isConfirmed}</TableCell>
-                  <TableCell>
-                    <Button
-                      disabled={booking.isConfirmed === "confirmed"}
-                      variant="outline"
-                      size="sm"
-                      className="mr-2"
-                      onClick={() => {
-                        // Handle approve action
-                      }}
-                    >
-                      Approve
-                    </Button>
-                    <Button
-                      disabled={booking.isConfirmed === "confirmed"}
-                      variant="destructive"
-                      size="sm"
-                      onClick={() => {
-                        // Handle reject action
-                      }}
-                    >
-                      Reject
-                    </Button>
+      <div className="h-96 overflow-y-scroll">
+        <Table className="overflow-x-auto">
+          <TableCaption>A list of all bookings</TableCaption>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Room Name</TableHead>
+              <TableHead>User Name</TableHead>
+              <TableHead>Date</TableHead>
+              <TableHead>Time</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {areBookingsLoading
+              ? "loading..."
+              : bookings
+              ? bookings.map((booking: TBooking) => (
+                  <TableRow key={booking?._id}>
+                    <TableCell>{booking?.room?.name}</TableCell>
+                    <TableCell>{booking?.user?.name}</TableCell>
+                    <TableCell>{booking?.date}</TableCell>
+                    <TableCell>{booking?.slots[0]?.startTime}</TableCell>
+                    <TableCell>{booking?.isConfirmed}</TableCell>
+                    <TableCell className="flex gap-2 flex-wrap">
+                      <Button
+                        disabled={booking.isConfirmed === "confirmed"}
+                        variant="outline"
+                        size="sm"
+                        className="mr-2"
+                        onClick={() => {
+                          // Handle approve action
+                        }}
+                      >
+                        Approve
+                      </Button>
+                      <Button
+                        disabled={booking.isConfirmed === "confirmed"}
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => {
+                          // Handle reject action
+                        }}
+                      >
+                        Reject
+                      </Button>
 
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Button
-                          variant="destructive"
-                          size="sm"
-                          className="ml-2"
-                        >
-                          Delete
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent>
-                        <DialogHeader>
-                          <DialogTitle>
-                            Are you sure to delete the booking?
-                          </DialogTitle>
-                          <DialogDescription>
-                            This action cannot be undone.
-                          </DialogDescription>
-                        </DialogHeader>
-                        <DialogFooter>
-                          <DialogClose>
-                            <Button
-                              variant="destructive"
-                              onClick={async () => {
-                                const res = await deleteBooking(booking._id);
-                                if (res.data) {
-                                  toast.success(
-                                    "Booking deleted successfully",
-                                    {
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            className="ml-2"
+                          >
+                            Delete
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>
+                              Are you sure to delete the booking?
+                            </DialogTitle>
+                            <DialogDescription>
+                              This action cannot be undone.
+                            </DialogDescription>
+                          </DialogHeader>
+                          <DialogFooter>
+                            <DialogClose>
+                              <Button
+                                variant="destructive"
+                                onClick={async () => {
+                                  const res = await deleteBooking(booking._id);
+                                  if (res.data) {
+                                    toast.success(
+                                      "Booking deleted successfully",
+                                      {
+                                        richColors: true,
+                                        position: "top-right",
+                                      }
+                                    );
+                                  }
+                                  if (res.error) {
+                                    toast.error("Failed to delete", {
                                       richColors: true,
                                       position: "top-right",
-                                    }
-                                  );
-                                }
-                                if (res.error) {
-                                  toast.error("Failed to delete", {
-                                    richColors: true,
-                                    position: "top-right",
-                                  });
-                                }
-                              }}
-                            >
-                              Delete
-                            </Button>
-                          </DialogClose>
-                          <DialogClose>
-                            <Button variant="outline">Cancel</Button>
-                          </DialogClose>
-                        </DialogFooter>
-                      </DialogContent>
-                    </Dialog>
-                  </TableCell>
-                </TableRow>
-              ))
-            : "No bookings found"}
-        </TableBody>
-      </Table>
+                                    });
+                                  }
+                                }}
+                              >
+                                Delete
+                              </Button>
+                            </DialogClose>
+                            <DialogClose>
+                              <Button variant="outline">Cancel</Button>
+                            </DialogClose>
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
+                    </TableCell>
+                  </TableRow>
+                ))
+              : "No bookings found"}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }
