@@ -6,7 +6,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { AnimatedButton } from "../components/AnimatedButton";
+import { DButton } from "../components/AnimatedButton";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 
@@ -99,13 +99,9 @@ export default function Login() {
               </p>
             )}
           </div>
-          <AnimatedButton
-            disabled={isSubmitting}
-            type="submit"
-            className="w-full"
-          >
+          <DButton disabled={isSubmitting} type="submit" className="w-full">
             {isSubmitting ? "Loading..." : "Login"}
-          </AnimatedButton>
+          </DButton>
         </form>
         {error && (
           <p className="text-red-500 text-sm mt-4 text-center">{error}</p>

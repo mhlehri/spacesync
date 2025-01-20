@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatedButton } from "@/components/AnimatedButton";
+import { DButton } from "@/components/AnimatedButton";
 // import { loadStripe } from "@stripe/stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { useState } from "react";
@@ -212,13 +212,13 @@ function Form() {
         </div>
       </div>
 
-      <AnimatedButton
+      <DButton
         disabled={loading}
         onClick={handleConfirmBooking}
         className="w-full"
       >
         Confirm and Pay
-      </AnimatedButton>
+      </DButton>
     </div>
   );
 }

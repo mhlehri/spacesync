@@ -38,7 +38,7 @@ export default function BookingManagement() {
   const [deleteBooking] = useDeleteBookingByIdMutation();
 
   return (
-    <div>
+    <div className="py-12">
       <h2 className="text-2xl font-semibold mb-4">Booking Management</h2>
       <Table>
         <TableCaption>A list of all bookings</TableCaption>
@@ -57,12 +57,12 @@ export default function BookingManagement() {
             ? "loading..."
             : bookings
             ? bookings.map((booking: TBooking) => (
-                <TableRow key={booking._id}>
-                  <TableCell>{booking.room.name}</TableCell>
-                  <TableCell>{booking.user.name}</TableCell>
-                  <TableCell>{booking.date}</TableCell>
-                  <TableCell>{booking.slots[0].startTime}</TableCell>
-                  <TableCell>{booking.isConfirmed}</TableCell>
+                <TableRow key={booking?._id}>
+                  <TableCell>{booking?.room?.name}</TableCell>
+                  <TableCell>{booking?.user?.name}</TableCell>
+                  <TableCell>{booking?.date}</TableCell>
+                  <TableCell>{booking?.slots[0]?.startTime}</TableCell>
+                  <TableCell>{booking?.isConfirmed}</TableCell>
                   <TableCell>
                     <Button
                       disabled={booking.isConfirmed === "confirmed"}

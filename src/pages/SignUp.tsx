@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { AnimatedButton } from "../components/AnimatedButton";
+import { DButton } from "../components/AnimatedButton";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { toast } from "sonner";
@@ -123,13 +123,9 @@ export default function SignUp() {
               </p>
             )}
           </div>
-          <AnimatedButton
-            disabled={isSubmitting}
-            type="submit"
-            className="w-full"
-          >
+          <DButton disabled={isSubmitting} type="submit" className="w-full">
             {isSubmitting ? "Submitting.." : "Sign Up"}
-          </AnimatedButton>
+          </DButton>
         </form>
         {error && (
           <p className="text-red-500 text-sm mt-4 text-center">{error}</p>

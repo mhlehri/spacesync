@@ -1,3 +1,4 @@
+import { DButton } from "@/components/AnimatedButton";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -36,52 +37,14 @@ export default function RoomManagement() {
   //? Use the useDeleteRoomByIdMutation hook to delete a room
   const [deleteRoom] = useDeleteRoomByIdMutation();
 
+  console.log(rooms);
+
   return (
-    <div>
+    <div className="py-12">
       <h2 className="text-2xl font-semibold mb-4">Room Management</h2>
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button className="mb-4">Add New Room</Button>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Add New Room</DialogTitle>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
-                Name
-              </Label>
-              <Input id="name" className="col-span-3" />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="roomNo" className="text-right">
-                Room No.
-              </Label>
-              <Input id="roomNo" className="col-span-3" />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="floorNo" className="text-right">
-                Floor No.
-              </Label>
-              <Input id="floorNo" type="number" className="col-span-3" />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="capacity" className="text-right">
-                Capacity
-              </Label>
-              <Input id="capacity" type="number" className="col-span-3" />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="pricePerSlot" className="text-right">
-                Price Per Slot
-              </Label>
-              <Input id="pricePerSlot" type="number" className="col-span-3" />
-            </div>
-          </div>
-          <Button>Add Room</Button>
-        </DialogContent>
-      </Dialog>
+
+      <DButton className="mb-4">Add New Room</DButton>
+
       <Table>
         <TableCaption>A list of all rooms</TableCaption>
         <TableHeader>

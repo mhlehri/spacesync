@@ -39,7 +39,7 @@ export default function SlotManagement() {
   //? Use the useDeleteSlotByIdMutation hook to delete a slot
   const [deleteSlot] = useDeleteSlotByIdMutation();
   return (
-    <div>
+    <div className="py-12">
       <h2 className="text-2xl font-semibold mb-4">Slots Management</h2>
       <Dialog>
         <DialogTrigger asChild>
