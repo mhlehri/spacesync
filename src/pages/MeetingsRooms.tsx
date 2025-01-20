@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/select";
 import { TRoom } from "@/types/room";
 import { RoomCard } from "@/components/pages/Room/room-card";
-import { useGetAllRoomsQuery } from "@/redux/features/rooms/rooms";
+import { useGetAllRoomsQuery } from "@/redux/features/rooms/roomsApi";
 
 export default function MeetingRooms() {
   const { data, isError, isLoading } = useGetAllRoomsQuery("");

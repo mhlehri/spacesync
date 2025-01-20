@@ -13,7 +13,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 // );
 
 import { useToast } from "@/hooks/use-toast";
-import { useAddBookingMutation } from "@/redux/features/bookings/bookings";
+import { useAddBookingMutation } from "@/redux/features/bookings/bookingsApi";
 import {
   CardElement,
   Elements,

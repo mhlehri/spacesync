@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { RoomCard } from "../Room/room-card";
-import { useGetFeaturedRoomsQuery } from "@/redux/features/rooms/rooms";
+import { useGetFeaturedRoomsQuery } from "@/redux/features/rooms/roomsApi";
 import { TRoom } from "@/types/room";
 
 export default function FeaturedRooms() {

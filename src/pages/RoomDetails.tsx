@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { useGetRoomByIdQuery } from "@/redux/features/rooms/rooms";
+import { useGetRoomByIdQuery } from "@/redux/features/rooms/roomsApi";
 import { useNavigate, useParams } from "react-router-dom";
 
 // This would typically come from an API or database

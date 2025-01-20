@@ -8,10 +8,22 @@ const slotsApi = baseApi.injectEndpoints({
     }),
     getAllSlots: builder.query({
       query: () => `slots`,
+      providesTags: ["Slot"],
+    }),
+    deleteSlotById: builder.mutation({
+      query: (id) => ({
+        url: `slots/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Slot"],
     }),
   }),
 });
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetAvailableSlotsQuery, useGetAllSlotsQuery } = slotsApi;
+export const {
+  useGetAvailableSlotsQuery,
+  useGetAllSlotsQuery,
+  useDeleteSlotByIdMutation,
+} = slotsApi;

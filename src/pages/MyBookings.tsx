@@ -7,7 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useGetAllMyBookingsQuery } from "@/redux/features/bookings/bookings";
+import { useGetAllMyBookingsQuery } from "@/redux/features/bookings/bookingsApi";
 import { selectCurrentUser } from "@/redux/store";
 import { TBooking } from "@/types/booking";
 
