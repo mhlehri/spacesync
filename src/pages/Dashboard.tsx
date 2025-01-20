@@ -1,7 +1,10 @@
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
+  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -18,7 +21,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useGetAllBookingsQuery } from "@/redux/features/bookings/bookings";
+import {
+  useDeleteBookingByIdMutation,
+  useGetAllBookingsQuery,
+} from "@/redux/features/bookings/bookings";
 import {
   useDeleteRoomByIdMutation,
   useGetAllRoomsQuery,
@@ -82,8 +88,11 @@ export default function AdminDashboard() {
   const rooms = roomsData?.data || [];
   const slots = slotsData?.data || [];
   const bookings = bookingsData?.data || [];
-
+  //? Use the useDeleteRoomByIdMutation hook to delete a room
   const [deleteRoom] = useDeleteRoomByIdMutation();
+  //? Use the useDeleteBookingByIdMutation hook to delete a booking
+  const [deleteBooking] = useDeleteBookingByIdMutation();
+
   console.log(bookings);
   const renderContent = () => {
     switch (activeTab) {
@@ -165,28 +174,52 @@ export default function AdminDashboard() {
                           <Button variant="outline" size="sm" className="mr-2">
                             Update
                           </Button>
-                          <Button
-                            onClick={async () => {
-                              const res = await deleteRoom(room._id);
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button variant="destructive" size="sm">
+                                Delete
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent>
+                              <DialogHeader>
+                                <DialogTitle>
+                                  Are you sure to delete the room?
+                                </DialogTitle>
+                                <DialogDescription>
+                                  This action cannot be undone.
+                                </DialogDescription>
+                              </DialogHeader>
+                              <DialogFooter>
+                                <Button
+                                  variant="destructive"
+                                  onClick={async () => {
+                                    const res = await deleteRoom(room._id);
 
-                              if (res.data) {
-                                toast.success("Room deleted successfully", {
-                                  richColors: true,
-                                  position: "top-right",
-                                });
-                              }
-                              if (res.error) {
-                                toast.error("An error occurred", {
-                                  richColors: true,
-                                  position: "top-right",
-                                });
-                              }
-                            }}
-                            variant="destructive"
-                            size="sm"
-                          >
-                            Delete
-                          </Button>
+                                    if (res.data) {
+                                      toast.success(
+                                        "Room deleted successfully",
+                                        {
+                                          richColors: true,
+                                          position: "top-right",
+                                        }
+                                      );
+                                    }
+                                    if (res.error) {
+                                      toast.error("Failed to delete", {
+                                        richColors: true,
+                                        position: "top-right",
+                                      });
+                                    }
+                                  }}
+                                >
+                                  Delete
+                                </Button>
+                                <DialogClose>
+                                  <Button variant="outline">Cancel</Button>
+                                </DialogClose>
+                              </DialogFooter>
+                            </DialogContent>
+                          </Dialog>
                         </TableCell>
                       </TableRow>
                     ))
@@ -346,16 +379,58 @@ export default function AdminDashboard() {
                           >
                             Reject
                           </Button>
-                          <Button
-                            variant="destructive"
-                            size="sm"
-                            className="ml-2"
-                            onClick={() => {
-                              // Handle reject action
-                            }}
-                          >
-                            Delete
-                          </Button>
+
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button
+                                variant="destructive"
+                                size="sm"
+                                className="ml-2"
+                              >
+                                Delete
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent>
+                              <DialogHeader>
+                                <DialogTitle>
+                                  Are you sure to delete the booking?
+                                </DialogTitle>
+                                <DialogDescription>
+                                  This action cannot be undone.
+                                </DialogDescription>
+                              </DialogHeader>
+                              <DialogFooter>
+                                <Button
+                                  variant="destructive"
+                                  onClick={async () => {
+                                    const res = await deleteBooking(
+                                      booking._id
+                                    );
+                                    if (res.data) {
+                                      toast.success(
+                                        "Booking deleted successfully",
+                                        {
+                                          richColors: true,
+                                          position: "top-right",
+                                        }
+                                      );
+                                    }
+                                    if (res.error) {
+                                      toast.error("Failed to delete", {
+                                        richColors: true,
+                                        position: "top-right",
+                                      });
+                                    }
+                                  }}
+                                >
+                                  Delete
+                                </Button>
+                                <DialogClose>
+                                  <Button variant="outline">Cancel</Button>
+                                </DialogClose>
+                              </DialogFooter>
+                            </DialogContent>
+                          </Dialog>
                         </TableCell>
                       </TableRow>
                     ))

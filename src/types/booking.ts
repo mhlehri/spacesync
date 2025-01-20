@@ -9,5 +9,5 @@ export interface TBooking {
   totalAmount: number;
   date: string;
   isDeleted: boolean;
-  isConfirmed: "unconfirmed" | "confirmed";
+  isConfirmed: "unconfirmed" | "confirmed" | "rejected";
 }
