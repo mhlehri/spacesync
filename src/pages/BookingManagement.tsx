@@ -23,6 +23,7 @@ import {
 import {
   useDeleteBookingByIdMutation,
   useGetAllBookingsQuery,
+  useUpdateBookingByIdMutation,
 } from "@/redux/features/bookings/bookingsApi";
 import { TBooking } from "@/types/booking";
 import { toast } from "sonner";
@@ -33,9 +34,11 @@ export default function BookingManagement() {
     useGetAllBookingsQuery("");
 
   const bookings = bookingsData?.data || [];
-
+  console.log(bookings);
   //? Use the useDeleteBookingByIdMutation hook to delete a booking
   const [deleteBooking] = useDeleteBookingByIdMutation();
+
+  const [updateBooking] = useUpdateBookingByIdMutation();
 
   return (
     <div className="py-12">
@@ -62,7 +65,10 @@ export default function BookingManagement() {
                     <TableCell>{booking?.room?.name}</TableCell>
                     <TableCell>{booking?.user?.name}</TableCell>
                     <TableCell>{booking?.date}</TableCell>
-                    <TableCell>{booking?.slots[0]?.startTime}</TableCell>
+                    <TableCell>
+                      {booking?.slots[0]?.startTime}-
+                      {booking?.slots[0]?.endTime}
+                    </TableCell>
                     <TableCell>{booking?.isConfirmed}</TableCell>
                     <TableCell className="flex gap-2 flex-wrap">
                       <Button
@@ -70,18 +76,47 @@ export default function BookingManagement() {
                         variant="outline"
                         size="sm"
                         className="mr-2"
-                        onClick={() => {
-                          // Handle approve action
+                        onClick={async () => {
+                          const res = await updateBooking({
+                            id: booking._id,
+                            data: { isConfirmed: "confirmed" },
+                          });
+                          if (res.data) {
+                            toast.success("Booking approved successfully", {
+                              richColors: true,
+                              position: "top-right",
+                            });
+                          } else if (res.error) {
+                            toast.error("Failed to approve", {
+                              richColors: true,
+                              position: "top-right",
+                            });
+                          }
                         }}
                       >
                         Approve
                       </Button>
                       <Button
-                        disabled={booking.isConfirmed === "confirmed"}
+                        disabled={booking.isConfirmed === "rejected"}
                         variant="destructive"
                         size="sm"
-                        onClick={() => {
-                          // Handle reject action
+                        onClick={async () => {
+                          console.log(booking._id, "id");
+                          const res = await updateBooking({
+                            id: booking._id,
+                            data: { isConfirmed: "rejected" },
+                          });
+                          if (res.data) {
+                            toast.success("Booking rejected successfully", {
+                              richColors: true,
+                              position: "top-right",
+                            });
+                          } else if (res.error) {
+                            toast.error("Failed to reject", {
+                              richColors: true,
+                              position: "top-right",
+                            });
+                          }
                         }}
                       >
                         Reject

@@ -10,6 +10,7 @@ export const roomApi = baseApi.injectEndpoints({
     }),
     getRoomById: builder.query({
       query: (id: string) => `rooms/${id}`,
+      providesTags: ["Room"],
     }),
     getFeaturedRooms: builder.query({
       query: () => `rooms/featured`,

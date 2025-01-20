@@ -87,7 +87,7 @@ export default function RoomUpdateForm() {
   }, [room, reset]);
   console.log(room);
   const onSubmit = async (data: FormData) => {
-    const a = amenities || room?.amenities;
+    const a = amenities.length ? amenities : room?.amenities;
     const d = { ...data, amenities: a };
     console.log(d, "submitted");
     const res = await updateRoom({ data: d, _id: room?._id });
