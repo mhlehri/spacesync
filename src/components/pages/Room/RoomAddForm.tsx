@@ -89,8 +89,11 @@ export default function RoomAddForm() {
   };
 
   return (
-    <div className="p-6">
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <div className="">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="space-y-6 p-4 max-w-3xl mx-auto"
+      >
         <h2 className="text-2xl text-center text-indigo-500 font-bold uppercase underline">
           Create New Room
         </h2>
@@ -99,50 +102,54 @@ export default function RoomAddForm() {
           <Input id="name" {...register("name")} />
           {errors.name && <p className="text-red-500">{errors.name.message}</p>}
         </div>
-        <div>
-          <Label htmlFor="roomNo">Room Number</Label>
-          <Input
-            id="roomNo"
-            type="number"
-            {...register("roomNo", { valueAsNumber: true })}
-          />
-          {errors.roomNo && (
-            <p className="text-red-500">{errors.roomNo.message}</p>
-          )}
+        <div className="flex justify-between gap-4 *:w-full flex-wrap md:flex-nowrap">
+          <div>
+            <Label htmlFor="roomNo">Room Number</Label>
+            <Input
+              id="roomNo"
+              type="number"
+              {...register("roomNo", { valueAsNumber: true })}
+            />
+            {errors.roomNo && (
+              <p className="text-red-500">{errors.roomNo.message}</p>
+            )}
+          </div>
+          <div>
+            <Label htmlFor="floorNo">Floor Number</Label>
+            <Input
+              id="floorNo"
+              type="number"
+              {...register("floorNo", { valueAsNumber: true })}
+            />
+            {errors.floorNo && (
+              <p className="text-red-500">{errors.floorNo.message}</p>
+            )}
+          </div>
         </div>
-        <div>
-          <Label htmlFor="floorNo">Floor Number</Label>
-          <Input
-            id="floorNo"
-            type="number"
-            {...register("floorNo", { valueAsNumber: true })}
-          />
-          {errors.floorNo && (
-            <p className="text-red-500">{errors.floorNo.message}</p>
-          )}
-        </div>
-        <div>
-          <Label htmlFor="capacity">Capacity</Label>
-          <Input
-            id="capacity"
-            type="number"
-            {...register("capacity", { valueAsNumber: true })}
-          />
-          {errors.capacity && (
-            <p className="text-red-500">{errors.capacity.message}</p>
-          )}
-        </div>
-        <div>
-          <Label htmlFor="pricePerSlot">Price Per Slot</Label>
-          <Input
-            id="pricePerSlot"
-            type="number"
-            step="0.01"
-            {...register("pricePerSlot", { valueAsNumber: true })}
-          />
-          {errors.pricePerSlot && (
-            <p className="text-red-500">{errors.pricePerSlot.message}</p>
-          )}
+        <div className="flex justify-between gap-4 *:w-full flex-wrap md:flex-nowrap">
+          <div>
+            <Label htmlFor="capacity">Capacity</Label>
+            <Input
+              id="capacity"
+              type="number"
+              {...register("capacity", { valueAsNumber: true })}
+            />
+            {errors.capacity && (
+              <p className="text-red-500">{errors.capacity.message}</p>
+            )}
+          </div>
+          <div>
+            <Label htmlFor="pricePerSlot">Price Per Slot</Label>
+            <Input
+              id="pricePerSlot"
+              type="number"
+              step="0.01"
+              {...register("pricePerSlot", { valueAsNumber: true })}
+            />
+            {errors.pricePerSlot && (
+              <p className="text-red-500">{errors.pricePerSlot.message}</p>
+            )}
+          </div>
         </div>
         <div>
           <Label htmlFor="amenities">Amenities (comma-separated)</Label>
@@ -171,7 +178,7 @@ export default function RoomAddForm() {
           <Input id="image3" {...register("images.2")} />
         </div>
         <DButton disabled={isSubmitting} type="submit" className="w-full">
-          {isSubmitting ? "submitting.." : "Add"}
+          {isSubmitting ? "submitting.." : "Create Room"}
         </DButton>
       </form>
     </div>
