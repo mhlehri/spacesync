@@ -61,77 +61,83 @@ export default function RoomManagement() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {isLoading
-              ? "loading..."
-              : rooms
-              ? rooms?.map((room: TRoom, index: number) => (
-                  <TableRow key={room._id}>
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell>{room.name}</TableCell>
-                    <TableCell>{room.roomNo}</TableCell>
-                    <TableCell>{room.floorNo}</TableCell>
-                    <TableCell>{room.capacity}</TableCell>
-                    <TableCell>${room.pricePerSlot}</TableCell>
-                    <TableCell className="flex gap-2 flex-wrap">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="mr-2"
-                        onClick={() => {
-                          navigate(`update-room/${room._id}`);
-                        }}
-                      >
-                        Update
-                      </Button>
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button variant="destructive" size="sm">
-                            Delete
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                          <DialogHeader>
-                            <DialogTitle>
-                              Are you sure to delete the room?
-                            </DialogTitle>
-                            <DialogDescription>
-                              This action cannot be undone.
-                            </DialogDescription>
-                          </DialogHeader>
-                          <DialogFooter>
-                            <DialogClose>
-                              <Button
-                                variant="destructive"
-                                onClick={async () => {
-                                  const res = await deleteRoom(room._id);
+            {isLoading ? (
+              <TableRow>
+                <TableCell colSpan={6}>
+                  <Loader2 className="size-10 animate-spin my-8 mx-auto" />
+                </TableCell>
+              </TableRow>
+            ) : rooms ? (
+              rooms?.map((room: TRoom, index: number) => (
+                <TableRow key={room._id}>
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{room.name}</TableCell>
+                  <TableCell>{room.roomNo}</TableCell>
+                  <TableCell>{room.floorNo}</TableCell>
+                  <TableCell>{room.capacity}</TableCell>
+                  <TableCell>${room.pricePerSlot}</TableCell>
+                  <TableCell className="flex gap-2 flex-wrap">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="mr-2"
+                      onClick={() => {
+                        navigate(`update-room/${room._id}`);
+                      }}
+                    >
+                      Update
+                    </Button>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button variant="destructive" size="sm">
+                          Delete
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>
+                            Are you sure to delete the room?
+                          </DialogTitle>
+                          <DialogDescription>
+                            This action cannot be undone.
+                          </DialogDescription>
+                        </DialogHeader>
+                        <DialogFooter>
+                          <DialogClose>
+                            <Button
+                              variant="destructive"
+                              onClick={async () => {
+                                const res = await deleteRoom(room._id);
 
-                                  if (res.data) {
-                                    toast.success("Room deleted successfully", {
-                                      richColors: true,
-                                      position: "top-right",
-                                    });
-                                  }
-                                  if (res.error) {
-                                    toast.error("Failed to delete", {
-                                      richColors: true,
-                                      position: "top-right",
-                                    });
-                                  }
-                                }}
-                              >
-                                Delete
-                              </Button>
-                            </DialogClose>
-                            <DialogClose>
-                              <Button variant="outline">Cancel</Button>
-                            </DialogClose>
-                          </DialogFooter>
-                        </DialogContent>
-                      </Dialog>
-                    </TableCell>
-                  </TableRow>
-                ))
-              : "No rooms found"}
+                                if (res.data) {
+                                  toast.success("Room deleted successfully", {
+                                    richColors: true,
+                                    position: "top-right",
+                                  });
+                                }
+                                if (res.error) {
+                                  toast.error("Failed to delete", {
+                                    richColors: true,
+                                    position: "top-right",
+                                  });
+                                }
+                              }}
+                            >
+                              Delete
+                            </Button>
+                          </DialogClose>
+                          <DialogClose>
+                            <Button variant="outline">Cancel</Button>
+                          </DialogClose>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              "No rooms found"
+            )}
           </TableBody>
         </Table>
       </div>
