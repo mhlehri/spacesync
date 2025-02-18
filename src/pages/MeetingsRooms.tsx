@@ -130,6 +130,7 @@ export default function MeetingRooms() {
       {totalPages > 1 && (
         <div className="flex justify-center space-x-2">
           <Button
+            variant="outline"
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
           >
@@ -139,6 +140,7 @@ export default function MeetingRooms() {
             Page {currentPage} of {totalPages}
           </span>
           <Button
+            variant="outline"
             onClick={() =>
               setCurrentPage((prev) => Math.min(prev + 1, totalPages))
             }
