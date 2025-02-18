@@ -43,8 +43,8 @@ export default function BookingManagement() {
   return (
     <div className="py-12">
       <h2 className="text-2xl font-semibold mb-4">Booking Management</h2>
-      <div className="h-96 overflow-y-scroll">
-        <Table className="overflow-x-auto">
+      <div className="h-96 overflow-y-scroll bg-white overflow-hidden rounded container">
+        <Table className="overflow-x-auto ">
           <TableCaption>A list of all bookings</TableCaption>
           <TableHeader>
             <TableRow>

@@ -26,6 +26,7 @@ import {
 } from "@/redux/features/slots/slotsApi";
 
 import { TSlot } from "@/types/slot";
+import { Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -44,7 +45,7 @@ export default function SlotManagement() {
       <DButton className="mb-4" asChild>
         <Link to={`create-slot`}>Create New Slot</Link>
       </DButton>
-      <div className="h-96 overflow-y-scroll ">
+      <div className="h-96 overflow-y-scroll bg-white overflow-hidden rounded container">
         <Table className="overflow-x-scroll">
           <TableCaption>A list of all slots</TableCaption>
           <TableHeader>
@@ -58,67 +59,73 @@ export default function SlotManagement() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {areSlotsLoading
-              ? "loading..."
-              : slots
-              ? slots.map((slot: TSlot, index: number) => (
-                  <TableRow key={slot._id}>
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell>{slot.room.name}</TableCell>
-                    <TableCell>{slot.room.roomNo}</TableCell>
-                    <TableCell>{slot.date}</TableCell>
-                    <TableCell>{slot.startTime}</TableCell>
-                    <TableCell>{slot.endTime}</TableCell>
-                    <TableCell className="flex gap-2 flex-wrap">
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button variant="destructive" size="sm">
-                            Delete
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                          <DialogHeader>
-                            <DialogTitle>
-                              Are you sure to delete the slot?
-                            </DialogTitle>
-                            <DialogDescription>
-                              This action cannot be undone.
-                            </DialogDescription>
-                          </DialogHeader>
-                          <DialogFooter>
-                            <DialogClose>
-                              <Button
-                                variant="destructive"
-                                onClick={async () => {
-                                  const res = await deleteSlot(slot._id);
+            {areSlotsLoading ? (
+              <TableRow>
+                <TableCell colSpan={5}>
+                  <Loader2 className="mx-auto h-4 w-4 animate-spin" />
+                </TableCell>
+              </TableRow>
+            ) : slots ? (
+              slots.map((slot: TSlot, index: number) => (
+                <TableRow key={slot._id}>
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{slot.room.name}</TableCell>
+                  <TableCell>{slot.room.roomNo}</TableCell>
+                  <TableCell>{slot.date}</TableCell>
+                  <TableCell>{slot.startTime}</TableCell>
+                  <TableCell>{slot.endTime}</TableCell>
+                  <TableCell className="flex gap-2 flex-wrap">
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button variant="destructive" size="sm">
+                          Delete
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>
+                            Are you sure to delete the slot?
+                          </DialogTitle>
+                          <DialogDescription>
+                            This action cannot be undone.
+                          </DialogDescription>
+                        </DialogHeader>
+                        <DialogFooter>
+                          <DialogClose>
+                            <Button
+                              variant="destructive"
+                              onClick={async () => {
+                                const res = await deleteSlot(slot._id);
 
-                                  if (res.data) {
-                                    toast.success("Slot deleted successfully", {
-                                      richColors: true,
-                                      position: "top-right",
-                                    });
-                                  }
-                                  if (res.error) {
-                                    toast.error("Failed to delete", {
-                                      richColors: true,
-                                      position: "top-right",
-                                    });
-                                  }
-                                }}
-                              >
-                                Delete
-                              </Button>
-                            </DialogClose>
-                            <DialogClose>
-                              <Button variant="outline">Cancel</Button>
-                            </DialogClose>
-                          </DialogFooter>
-                        </DialogContent>
-                      </Dialog>
-                    </TableCell>
-                  </TableRow>
-                ))
-              : "No slots found"}
+                                if (res.data) {
+                                  toast.success("Slot deleted successfully", {
+                                    richColors: true,
+                                    position: "top-right",
+                                  });
+                                }
+                                if (res.error) {
+                                  toast.error("Failed to delete", {
+                                    richColors: true,
+                                    position: "top-right",
+                                  });
+                                }
+                              }}
+                            >
+                              Delete
+                            </Button>
+                          </DialogClose>
+                          <DialogClose>
+                            <Button variant="outline">Cancel</Button>
+                          </DialogClose>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              "No slots found"
+            )}
           </TableBody>
         </Table>
       </div>

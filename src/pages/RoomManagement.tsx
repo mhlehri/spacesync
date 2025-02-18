@@ -46,7 +46,7 @@ export default function RoomManagement() {
         <Link to={`create-room`}>Create New Room</Link>
       </DButton>
 
-      <div className="h-96 overflow-y-scroll">
+      <div className="h-96 overflow-y-scroll bg-white overflow-hidden rounded container">
         <Table className="overflow-x-auto">
           <TableCaption>A list of all rooms</TableCaption>
           <TableHeader>
