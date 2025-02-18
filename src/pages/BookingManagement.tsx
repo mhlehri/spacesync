@@ -26,6 +26,7 @@ import {
   useUpdateBookingByIdMutation,
 } from "@/redux/features/bookings/bookingsApi";
 import { TBooking } from "@/types/booking";
+import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 export default function BookingManagement() {
@@ -58,127 +59,132 @@ export default function BookingManagement() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {areBookingsLoading
-              ? "loading..."
-              : bookings
-              ? bookings.map((booking: TBooking, index: number) => (
-                  <TableRow key={booking?._id}>
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell>{booking?.room?.name}</TableCell>
-                    <TableCell>{booking?.user?.name}</TableCell>
-                    <TableCell>{booking?.date}</TableCell>
-                    <TableCell>
-                      {booking?.slots[0]?.startTime}-
-                      {booking?.slots[0]?.endTime}
-                    </TableCell>
-                    <TableCell>{booking?.isConfirmed}</TableCell>
-                    <TableCell className="flex gap-2 flex-wrap">
-                      <Button
-                        disabled={booking.isConfirmed === "confirmed"}
-                        variant="outline"
-                        size="sm"
-                        className="mr-2"
-                        onClick={async () => {
-                          const res = await updateBooking({
-                            id: booking._id,
-                            data: { isConfirmed: "confirmed" },
+            {areBookingsLoading ? (
+              <TableRow>
+                <TableCell colSpan={6}>
+                  <Loader2 className="size-10 animate-spin my-8 mx-auto" />
+                </TableCell>
+              </TableRow>
+            ) : bookings ? (
+              bookings.map((booking: TBooking, index: number) => (
+                <TableRow key={booking?._id}>
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{booking?.room?.name}</TableCell>
+                  <TableCell>{booking?.user?.name}</TableCell>
+                  <TableCell>{booking?.date}</TableCell>
+                  <TableCell>
+                    {booking?.slots[0]?.startTime}-{booking?.slots[0]?.endTime}
+                  </TableCell>
+                  <TableCell>{booking?.isConfirmed}</TableCell>
+                  <TableCell className="flex gap-2 flex-wrap">
+                    <Button
+                      disabled={booking.isConfirmed === "confirmed"}
+                      variant="outline"
+                      size="sm"
+                      className="mr-2"
+                      onClick={async () => {
+                        const res = await updateBooking({
+                          id: booking._id,
+                          data: { isConfirmed: "confirmed" },
+                        });
+                        if (res.data) {
+                          toast.success("Booking approved successfully", {
+                            richColors: true,
+                            position: "top-right",
                           });
-                          if (res.data) {
-                            toast.success("Booking approved successfully", {
-                              richColors: true,
-                              position: "top-right",
-                            });
-                          } else if (res.error) {
-                            toast.error("Failed to approve", {
-                              richColors: true,
-                              position: "top-right",
-                            });
-                          }
-                        }}
-                      >
-                        Approve
-                      </Button>
-                      <Button
-                        disabled={booking.isConfirmed === "rejected"}
-                        variant="destructive"
-                        size="sm"
-                        onClick={async () => {
-                          // console.log(booking._id, "id");
-                          const res = await updateBooking({
-                            id: booking._id,
-                            data: { isConfirmed: "rejected" },
+                        } else if (res.error) {
+                          toast.error("Failed to approve", {
+                            richColors: true,
+                            position: "top-right",
                           });
-                          if (res.data) {
-                            toast.success("Booking rejected successfully", {
-                              richColors: true,
-                              position: "top-right",
-                            });
-                          } else if (res.error) {
-                            toast.error("Failed to reject", {
-                              richColors: true,
-                              position: "top-right",
-                            });
-                          }
-                        }}
-                      >
-                        Reject
-                      </Button>
+                        }
+                      }}
+                    >
+                      Approve
+                    </Button>
+                    <Button
+                      disabled={booking.isConfirmed === "rejected"}
+                      variant="destructive"
+                      size="sm"
+                      onClick={async () => {
+                        // console.log(booking._id, "id");
+                        const res = await updateBooking({
+                          id: booking._id,
+                          data: { isConfirmed: "rejected" },
+                        });
+                        if (res.data) {
+                          toast.success("Booking rejected successfully", {
+                            richColors: true,
+                            position: "top-right",
+                          });
+                        } else if (res.error) {
+                          toast.error("Failed to reject", {
+                            richColors: true,
+                            position: "top-right",
+                          });
+                        }
+                      }}
+                    >
+                      Reject
+                    </Button>
 
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button
-                            variant="destructive"
-                            size="sm"
-                            className="ml-2"
-                          >
-                            Delete
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                          <DialogHeader>
-                            <DialogTitle>
-                              Are you sure to delete the booking?
-                            </DialogTitle>
-                            <DialogDescription>
-                              This action cannot be undone.
-                            </DialogDescription>
-                          </DialogHeader>
-                          <DialogFooter>
-                            <DialogClose>
-                              <Button
-                                variant="destructive"
-                                onClick={async () => {
-                                  const res = await deleteBooking(booking._id);
-                                  if (res.data) {
-                                    toast.success(
-                                      "Booking deleted successfully",
-                                      {
-                                        richColors: true,
-                                        position: "top-right",
-                                      }
-                                    );
-                                  }
-                                  if (res.error) {
-                                    toast.error("Failed to delete", {
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          className="ml-2"
+                        >
+                          Delete
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>
+                            Are you sure to delete the booking?
+                          </DialogTitle>
+                          <DialogDescription>
+                            This action cannot be undone.
+                          </DialogDescription>
+                        </DialogHeader>
+                        <DialogFooter>
+                          <DialogClose>
+                            <Button
+                              variant="destructive"
+                              onClick={async () => {
+                                const res = await deleteBooking(booking._id);
+                                if (res.data) {
+                                  toast.success(
+                                    "Booking deleted successfully",
+                                    {
                                       richColors: true,
                                       position: "top-right",
-                                    });
-                                  }
-                                }}
-                              >
-                                Delete
-                              </Button>
-                            </DialogClose>
-                            <DialogClose>
-                              <Button variant="outline">Cancel</Button>
-                            </DialogClose>
-                          </DialogFooter>
-                        </DialogContent>
-                      </Dialog>
-                    </TableCell>
-                  </TableRow>
-                ))
-              : "No bookings found"}
+                                    }
+                                  );
+                                }
+                                if (res.error) {
+                                  toast.error("Failed to delete", {
+                                    richColors: true,
+                                    position: "top-right",
+                                  });
+                                }
+                              }}
+                            >
+                              Delete
+                            </Button>
+                          </DialogClose>
+                          <DialogClose>
+                            <Button variant="outline">Cancel</Button>
+                          </DialogClose>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              "No bookings found"
+            )}
           </TableBody>
         </Table>
       </div>

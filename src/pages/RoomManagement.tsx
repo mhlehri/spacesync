@@ -24,6 +24,7 @@ import {
   useGetAllRoomsQuery,
 } from "@/redux/features/rooms/roomsApi";
 import { TRoom } from "@/types/room";
+import { Loader2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
