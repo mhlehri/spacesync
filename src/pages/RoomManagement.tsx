@@ -64,7 +64,7 @@ export default function RoomManagement() {
           <TableBody>
             {isLoading ? (
               <TableRow>
-                <TableCell colSpan={6}>
+                <TableCell colSpan={7}>
                   <Loader2 className="size-10 animate-spin my-8 mx-auto" />
                 </TableCell>
               </TableRow>
