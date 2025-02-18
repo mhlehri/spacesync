@@ -28,7 +28,7 @@ function OurStory() {
 
   return (
     <div className="p-6 mx-auto py-12">
-      <h2 className="text-3xl font-semibold text-gray-900 mb-8 underline underline-offset-8 ">
+      <h2 className="text-3xl font-semibold text-indigo-600 mb-8 underline underline-offset-8 ">
         Our Story
       </h2>
       <div className="flex gap-4 justify-between items-center flex-wrap md:flex-nowrap">

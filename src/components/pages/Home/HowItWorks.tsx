@@ -4,7 +4,7 @@ import { Calendar, CheckCircle, DoorOpen } from "lucide-react";
 export default function HowItWorks() {
   return (
     <section className="py-12">
-      <h2 className="text-3xl font-semibold text-gray-900 mb-8 underline underline-offset-8 text-center">
+      <h2 className="text-3xl font-semibold text-indigo-600 mb-8 underline underline-offset-8 text-center">
         How It Works?
       </h2>
       <div className="flex flex-col md:flex-row justify-around items-center gap-3">

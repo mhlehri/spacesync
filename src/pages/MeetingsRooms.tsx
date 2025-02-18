@@ -50,7 +50,7 @@ export default function MeetingRooms() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-semibold text-gray-900 mb-8 underline underline-offset-8">
+      <h1 className="text-3xl font-semibold text-indigo-600 mb-8 underline underline-offset-8">
         Meeting Rooms
       </h1>
 
