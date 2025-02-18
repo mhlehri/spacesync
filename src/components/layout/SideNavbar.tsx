@@ -45,7 +45,9 @@ export default function Sidebar() {
         } lg:translate-x-0`}
       >
         <div className="p-4">
-          <h2 className="text-2xl font-bold mb-6 text-right">Dashboard</h2>
+          <h2 className="text-2xl font-bold mb-6 text-right lg:text-left pl-2">
+            Dashboard
+          </h2>
           <ul className="space-y-2">
             {navItems.map((item) => (
               <li key={item.to}>

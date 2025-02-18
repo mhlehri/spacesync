@@ -91,7 +91,10 @@ export default function CreateSlotForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-8 p-4 max-w-2xl mx-auto"
+      >
         <h2 className="text-2xl text-center text-indigo-500 font-bold uppercase underline">
           Create New Slot
         </h2>
@@ -194,7 +197,7 @@ export default function CreateSlotForm() {
           disabled={form.formState.isSubmitting || !form.formState.isValid}
           type="submit"
         >
-          {form.formState.isSubmitting ? "Submitting.." : "Submit"}
+          {form.formState.isSubmitting ? "Submitting.." : "Create Slot"}
         </DButton>
       </form>
     </Form>
