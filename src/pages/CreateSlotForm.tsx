@@ -86,7 +86,7 @@ export default function CreateSlotForm() {
     }
   };
 
-  if (isLoading) return <div>Loading rooms...</div>;
+  if (isLoading) return <CreateSlotFormSkeleton />;
   if (isError) return <div>Error loading rooms</div>;
 
   return (
@@ -201,5 +201,43 @@ export default function CreateSlotForm() {
         </DButton>
       </form>
     </Form>
+  );
+}
+
+function CreateSlotFormSkeleton() {
+  return (
+    <form className="space-y-8 p-4 max-w-2xl mx-auto">
+      {/* Title */}
+      <h2 className="text-2xl text-center text-indigo-500 font-bold uppercase underline">
+        Create New Slot
+      </h2>
+
+      {/* Room Selection Skeleton */}
+      <div className="space-y-2">
+        <label className="block font-medium text-gray-700">Room</label>
+        <div className="w-full h-10 bg-gray-200 rounded animate-pulse"></div>
+      </div>
+
+      {/* Date Input Skeleton */}
+      <div className="space-y-2">
+        <label className="block font-medium text-gray-700">Date</label>
+        <div className="w-full h-10 bg-gray-200 rounded animate-pulse"></div>
+      </div>
+
+      {/* Start Time Selection Skeleton */}
+      <div className="space-y-2">
+        <label className="block font-medium text-gray-700">Start Time</label>
+        <div className="w-full h-10 bg-gray-200 rounded animate-pulse"></div>
+      </div>
+
+      {/* End Time Selection Skeleton */}
+      <div className="space-y-2">
+        <label className="block font-medium text-gray-700">End Time</label>
+        <div className="w-full h-10 bg-gray-200 rounded animate-pulse"></div>
+      </div>
+
+      {/* Submit Button Skeleton */}
+      <div className="w-full h-12 bg-indigo-300 rounded animate-pulse"></div>
+    </form>
   );
 }
