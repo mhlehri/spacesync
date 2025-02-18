@@ -27,7 +27,7 @@ function OurStory() {
   ];
 
   return (
-    <div className="p-6 mx-auto py-12">
+    <div className="px-4 lg:px-0 mx-auto py-12">
       <h2 className="text-3xl font-semibold text-indigo-600 mb-8 underline underline-offset-8 ">
         Our Story
       </h2>

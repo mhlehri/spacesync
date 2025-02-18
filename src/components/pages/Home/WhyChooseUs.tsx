@@ -4,7 +4,7 @@ import { CalendarCheck, ShieldCheck } from "lucide-react";
 export default function WhyChooseUs() {
   return (
     <section className="py-12">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 lg:px-0">
         <h2 className="text-3xl font-semibold text-indigo-600 mb-8 underline underline-offset-8 text-center">
           Why Us?
         </h2>

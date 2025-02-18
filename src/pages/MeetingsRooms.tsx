@@ -49,7 +49,7 @@ export default function MeetingRooms() {
   // if (isLoading) return <div>Loading...</div>;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
+    <div className="max-w-7xl mx-auto px-4 lg:px-0 py-8">
       <h1 className="text-3xl font-semibold text-indigo-600 mb-8 underline underline-offset-8">
         Meeting Rooms
       </h1>

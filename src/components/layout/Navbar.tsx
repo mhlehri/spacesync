@@ -49,7 +49,7 @@ export default function Navbar() {
 
   return (
     <nav className="bg-white shadow-lg sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 lg:px-0">
         <div className="flex justify-between h-16">
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
@@ -112,14 +112,14 @@ export default function Navbar() {
                 <Link
                   onClick={() => setIsOpen(!isOpen)}
                   to="/login"
-                  className="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium"
+                  className="text-gray-500 hover:text-gray-700 py-2 rounded-md text-sm font-medium"
                 >
                   Login
                 </Link>
                 <Link
                   onClick={() => setIsOpen(!isOpen)}
                   to="/signup"
-                  className="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium"
+                  className="text-gray-500 hover:text-gray-700 py-2 rounded-md text-sm font-medium ml-4"
                 >
                   Sign Up
                 </Link>

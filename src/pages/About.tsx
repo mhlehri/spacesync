@@ -3,13 +3,18 @@ import OurStory from "@/components/pages/About/OurStory";
 
 export default function About() {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="max-w-7xl mx-auto px-4 lg:px-0">
       <section className="py-24 relative">
-        <div className="w-full max-w-7xl px-4 md:px-0 mx-auto">
+        <div className="">
           <div className="w-full justify-start items-center gap-8 grid lg:grid-cols-2 grid-cols-1">
+            <img
+              className="lg:mx-0 mx-auto h-full rounded-3xl object-cover"
+              src="https://pagedone.io/asset/uploads/1717751272.png"
+              alt="about Us image"
+            />
             <div className="w-full flex-col justify-start lg:items-start items-center gap-10 inline-flex">
               <div className="w-full flex-col justify-start lg:items-start items-center gap-4 flex">
-                <h2 className="text-gray-900 text-4xl font-bold font-manrope leading-normal lg:text-start text-center">
+                <h2 className="text-indigo-600 text-4xl font-bold font-manrope leading-normal lg:text-start text-center">
                   Building Stronger Communities through Collaboration and
                   Empowerment
                 </h2>
@@ -22,11 +27,6 @@ export default function About() {
                 </p>
               </div>
             </div>
-            <img
-              className="lg:mx-0 mx-auto h-full rounded-3xl object-cover"
-              src="https://pagedone.io/asset/uploads/1717751272.png"
-              alt="about Us image"
-            />
           </div>
         </div>
       </section>

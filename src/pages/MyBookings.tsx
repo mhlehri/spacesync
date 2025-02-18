@@ -17,7 +17,7 @@ export default function MyBookings() {
   // console.log("my bookings data =>", data);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="max-w-7xl mx-auto px-4 lg:px-0 py-12">
       <h1 className="text-3xl font-bold mb-8">My Bookings</h1>
       <Table>
         <TableCaption>A list of your recent bookings</TableCaption>
