@@ -117,7 +117,10 @@ export default function Login() {
           )}
           <p className="mt-4 text-gray-400">
             Don't have an account?{" "}
-            <Link className="text-black underline font-bold" to={`/signup`}>
+            <Link
+              className="text-indigo-500 underline font-bold"
+              to={`/signup`}
+            >
               Signup
             </Link>
           </p>
