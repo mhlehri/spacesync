@@ -61,8 +61,8 @@ export default function SlotManagement() {
           <TableBody>
             {areSlotsLoading ? (
               <TableRow>
-                <TableCell colSpan={5}>
-                  <Loader2 className="mx-auto h-4 w-4 animate-spin" />
+                <TableCell colSpan={6}>
+                  <Loader2 className="size-10 animate-spin my-8 mx-auto" />
                 </TableCell>
               </TableRow>
             ) : slots ? (
