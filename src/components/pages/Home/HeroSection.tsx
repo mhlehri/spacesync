@@ -1,4 +1,4 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function HeroSection() {
@@ -11,17 +11,17 @@ export default function HeroSection() {
       />
       <div className="absolute inset-0 bg-black bg-opacity-50" />
       <div className="absolute inset-0 z-10 bg-black/50 flex flex-col items-center justify-center h-full text-center text-white px-4 sm:px-6 lg:px-8">
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 ">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 ">
           Book Your Ideal Meeting Room with Ease
         </h1>
-        <p className="text-xl sm:text-2xl md:text-3xl mb-8 opacity-80">
+        <p className="text-lg sm:text-xl md:text-2xl mb-8 opacity-80">
           Efficient, hassle-free room booking for all your meeting needs
         </p>
         <Link
           to="/meeting-rooms"
-          className="bg-indigo-200 border-2 border-indigo-700 flex gap-2 items-center hover:bg-indigo-700 text-indigo-700 font-bold hover:text-white py-3 px-8 rounded text-lg transition duration-300 ease-in-out transform hover:scale-105"
+          className="bg-indigo-100 border-2 border-indigo-600 flex gap-2 items-center hover:bg-indigo-600 text-indigo-600 font-bold hover:text-white py-3 px-8 rounded text-lg transition duration-300 ease-in-out transform hover:scale-105 "
         >
-          Book Now <ArrowRight />
+          <Calendar /> Book Now
         </Link>
       </div>
     </div>
