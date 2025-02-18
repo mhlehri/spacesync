@@ -7,11 +7,11 @@ import { useNavigate, useParams } from "react-router-dom";
 export default function RoomDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
-  console.log(id);
+  // console.log(id);
   const { data, isError, isLoading } = useGetRoomByIdQuery(id as string);
-  console.log(data);
+  // console.log(data);
   const room = data?.data || [];
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <RoomDetailsSkeleton />;
   if (isError) {
     return <div>Room not found</div>;
   }
@@ -127,3 +127,59 @@ export default function RoomDetails() {
     </div>
   );
 }
+
+const RoomDetailsSkeleton = () => {
+  return (
+    <div className="max-w-7xl mx-auto py-12 grid grid-cols-1 md:grid-cols-2 gap-8 animate-pulse">
+      {/* Image Section */}
+      <div>
+        <div className="relative h-96 mb-4 bg-gray-300 rounded-lg"></div>
+        <div className="grid grid-cols-3 gap-4">
+          {[...Array(3)].map((_, index) => (
+            <div
+              key={index}
+              className="relative h-24 bg-gray-300 rounded-lg"
+            ></div>
+          ))}
+        </div>
+      </div>
+
+      {/* Details Section */}
+      <div>
+        <div className="bg-white shadow overflow-hidden sm:rounded-lg">
+          <div className="px-4 py-5 sm:px-6">
+            <div className="h-6 bg-gray-300 rounded w-1/3"></div>
+          </div>
+          <div className="border-t border-gray-200">
+            <dl>
+              {[
+                "Room No.",
+                "Floor No.",
+                "Capacity",
+                "Price Per Slot",
+                "Amenities",
+              ].map((label, index) => (
+                <div
+                  key={index}
+                  className={`px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 ${
+                    index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                  }`}
+                >
+                  <dt className="text-sm font-medium text-gray-500">
+                    <div className="h-4 bg-gray-300 rounded w-1/4"></div>
+                  </dt>
+                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                    <div className="h-4 bg-gray-300 rounded w-3/4"></div>
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </div>
+        <div className="mt-8">
+          <div className="w-full py-6 px-4 bg-indigo-300 rounded-md"></div>
+        </div>
+      </div>
+    </div>
+  );
+};

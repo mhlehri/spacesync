@@ -1,3 +1,4 @@
+import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function HeroSection() {
@@ -18,9 +19,9 @@ export default function HeroSection() {
         </p>
         <Link
           to="/meeting-rooms"
-          className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded text-lg transition duration-300 ease-in-out transform hover:scale-105"
+          className="bg-indigo-200 border-2 border-indigo-700 flex gap-2 items-center hover:bg-indigo-700 text-indigo-700 font-bold hover:text-white py-3 px-8 rounded text-lg transition duration-300 ease-in-out transform hover:scale-105"
         >
-          Book Now
+          Book Now <ArrowRight />
         </Link>
       </div>
     </div>

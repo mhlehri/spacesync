@@ -4,7 +4,6 @@ import About from "@/pages/About";
 import AddRoom from "@/pages/AddRoom";
 import Booking from "@/pages/Booking";
 import BookingManagement from "@/pages/BookingManagement";
-import ConfirmationPage from "@/pages/Confirmatin";
 import Contact from "@/pages/Contact";
 import CreateSlot from "@/pages/CreateSlot";
 import Dashboard from "@/pages/Dashboard";
@@ -21,6 +20,7 @@ import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "../MainLayout";
 import Home from "../pages/Home";
 import AdminRoute from "@/components/layout/AdminRoute";
+import ConfirmationPage from "@/pages/Confirmatin";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -41,6 +41,10 @@ export const router = createBrowserRouter([
       },
       {
         path: "contact",
+        element: <Contact />,
+      },
+      {
+        path: "complete",
         element: <Contact />,
       },
       {
@@ -79,9 +83,9 @@ export const router = createBrowserRouter([
       {
         path: "/meeting-rooms/:id",
         element: (
-          <ProtectedRoute>
+          <>
             <RoomDetails />
-          </ProtectedRoute>
+          </>
         ),
       },
     ],

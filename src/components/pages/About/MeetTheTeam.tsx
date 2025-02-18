@@ -27,7 +27,7 @@ export default function MeetTheTeam() {
 
   return (
     <section className="py-12">
-      <h2 className="text-4xl font-bold text-center text-gray-800 mb-4 md:mb-8">
+      <h2 className="text-3xl font-semibold text-gray-900 mb-8 underline underline-offset-8 ">
         Our Team
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

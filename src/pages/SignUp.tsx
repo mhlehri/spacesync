@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { DButton } from "../components/AnimatedButton";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
@@ -16,11 +16,10 @@ export default function SignUp() {
   } = useForm<TUser>();
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
-  const [signup, { data: MData }] = useSignupMutation();
-  console.log(MData);
+  const [signup] = useSignupMutation();
   const onSubmit = async (data: TUser) => {
     data.role = "user";
-    console.log("data =>", data);
+    // console.log("data =>", data);
     try {
       const res = await signup(data);
       if (res.error) {
@@ -35,7 +34,7 @@ export default function SignUp() {
         state: { message: "Account created successfully. Please log in." },
       });
     } catch (err) {
-      console.log((err as Error).message);
+      // console.log((err as Error).message);
       if ((err as Error).message.includes("E11000 duplicate key")) {
         setError("Email already exists. Please use a different email.");
         return;
@@ -130,6 +129,12 @@ export default function SignUp() {
         {error && (
           <p className="text-red-500 text-sm mt-4 text-center">{error}</p>
         )}
+        <p className="mt-4 text-gray-400">
+          Already have an account?{" "}
+          <Link className="text-black underline font-bold" to={`/login`}>
+            Login
+          </Link>
+        </p>
       </div>
     </div>
   );

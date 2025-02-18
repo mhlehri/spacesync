@@ -2,8 +2,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { RootState } from "../store";
 
+const api = import.meta.env.VITE_API;
+
 const baseQuery = fetchBaseQuery({
-  baseUrl: "https://meetspacemanager.vercel.app/api/",
+  baseUrl: `${api}/api`,
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.token;

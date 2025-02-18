@@ -38,9 +38,9 @@ function Form() {
 
   const elements = useElements();
   const stripe = useStripe();
-
+  const api = import.meta.env.VITE_API;
   React.useEffect(() => {
-    fetch("https://meetspacemanager.vercel.app/create-checkout-session", {
+    fetch(`${api}/create-checkout-session`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -52,7 +52,7 @@ function Form() {
         // console.log(data);
         setClientSecret(data.clientSecret);
       });
-  }, []);
+  }, [api]);
 
   const location = useLocation();
   const bookingDetails = location.state.bookingData;
@@ -64,7 +64,7 @@ function Form() {
     slots: [bookingDetails.slot],
   };
   const { toast: t } = useToast();
-  console.log(bookingData, "bookingData");
+  // console.log(bookingData, "bookingData");
   const [loading, setLoading] = useState(false);
 
   const [addBooking, { isError }] = useAddBookingMutation();
@@ -106,7 +106,7 @@ function Form() {
       });
     if (confirmError) {
       setLoading(false);
-      console.log("confirm error", confirmError);
+      // console.log("confirm error", confirmError);
       toast.error("Payment Failed", {
         description: confirmError.message,
         richColors: true,

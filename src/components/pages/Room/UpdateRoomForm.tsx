@@ -85,11 +85,11 @@ export default function RoomUpdateForm() {
       });
     }
   }, [room, reset]);
-  console.log(room);
+//   console.log(room);
   const onSubmit = async (data: FormData) => {
     const a = amenities.length ? amenities : room?.amenities;
     const d = { ...data, amenities: a };
-    console.log(d, "submitted");
+    // console.log(d, "submitted");
     const res = await updateRoom({ data: d, _id: room?._id });
     if (res.error) {
       toast.error("Failed to update room. Please try again", {
@@ -100,7 +100,7 @@ export default function RoomUpdateForm() {
         richColors: true,
       });
       navigate(-1);
-      console.log(res.data);
+    //   console.log(res.data);
     }
   };
 

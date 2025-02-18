@@ -4,12 +4,12 @@ import { Calendar, CheckCircle, DoorOpen } from "lucide-react";
 export default function HowItWorks() {
   return (
     <section className="py-12">
-      <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">
-        How It Works
+      <h2 className="text-3xl font-semibold text-gray-900 mb-8 underline underline-offset-8 text-center">
+        How It Works?
       </h2>
       <div className="flex flex-col md:flex-row justify-around items-center gap-3">
         {/* Step 1: Select a Room */}
-        <Card className="flex flex-col items-center text-center p-4 max-w-xs">
+        <Card className="flex flex-col items-center text-center p-4 flex-1">
           <CardHeader>
             <DoorOpen className="w-16 h-16 text-indigo-600" />
           </CardHeader>
@@ -24,7 +24,7 @@ export default function HowItWorks() {
           </CardContent>
         </Card>
         {/* Step 2: Choose Date & Time */}
-        <Card className="flex flex-col items-center text-center p-4 max-w-xs">
+        <Card className="flex flex-col items-center text-center p-4 flex-1">
           <CardHeader>
             <Calendar className="w-16 h-16 text-indigo-600 mb-4" />
           </CardHeader>
@@ -39,7 +39,7 @@ export default function HowItWorks() {
           </CardContent>
         </Card>
         {/* Step 3: Confirm Booking */}
-        <Card className="flex flex-col items-center text-center p-4 max-w-xs">
+        <Card className="flex flex-col items-center text-center p-4 flex-1">
           <CardHeader>
             <CheckCircle className="w-16 h-16 text-indigo-600 mb-4" />
           </CardHeader>

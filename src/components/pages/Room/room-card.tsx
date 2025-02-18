@@ -22,7 +22,7 @@ export function RoomCard({ room }: RoomCardProps) {
           />
         </div>
         <div className="p-4">
-          <h3 className="text-lg font-semibold">{room.name}</h3>
+          <h3 className="text-lg font-semibold uppercase">{room.name}</h3>
           <p className="text-sm text-gray-500">Capacity: {room.capacity}</p>
           <p className="text-sm font-medium">${room.pricePerSlot} per slot</p>
         </div>

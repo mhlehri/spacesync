@@ -42,7 +42,7 @@ export default function SlotManagement() {
     <div className="py-12">
       <h2 className="text-2xl font-semibold mb-4">Slots Management</h2>
       <DButton className="mb-4" asChild>
-        <Link to={`create-slot`}>Create New Room</Link>
+        <Link to={`create-slot`}>Create New Slot</Link>
       </DButton>
       <div className="h-96 overflow-y-scroll ">
         <Table className="overflow-x-scroll">
@@ -61,8 +61,9 @@ export default function SlotManagement() {
             {areSlotsLoading
               ? "loading..."
               : slots
-              ? slots.map((slot: TSlot) => (
+              ? slots.map((slot: TSlot, index: number) => (
                   <TableRow key={slot._id}>
+                    <TableCell>{index + 1}</TableCell>
                     <TableCell>{slot.room.name}</TableCell>
                     <TableCell>{slot.room.roomNo}</TableCell>
                     <TableCell>{slot.date}</TableCell>

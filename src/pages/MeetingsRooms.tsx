@@ -24,7 +24,7 @@ export default function MeetingRooms() {
   const roomsPerPage = 8;
 
   // Get filtered room data from API based on state variables
-  const { data, isLoading } = useGetAllRoomsQuery({
+  const { data, isLoading, isError } = useGetAllRoomsQuery({
     searchTerm: debounce,
     capacityFilter,
     priceFilter,
@@ -32,7 +32,7 @@ export default function MeetingRooms() {
     currentPage,
     roomsPerPage,
   });
-  console.log(data);
+  // console.log(data);
   const roomsData = useMemo(() => data?.data?.rooms || [], [data]);
   const totalRooms = useMemo(() => data?.data?.total || 0, [data]);
 
@@ -52,7 +52,7 @@ export default function MeetingRooms() {
     <div className="max-w-7xl mx-auto px-4 py-8">
       <h1 className="text-4xl font-bold mb-8">Meeting Rooms</h1>
 
-      <div className="mb-6 space-y-4">
+      <div className="flex justify-between flex-wrap gap-4 items-center mb-6">
         <Input
           type="text"
           placeholder="Search rooms..."
@@ -81,8 +81,8 @@ export default function MeetingRooms() {
             <SelectContent>
               <SelectItem value="0">Any price</SelectItem>
               <SelectItem value="50">Up to $50</SelectItem>
-              <SelectItem value="100">Up to $100</SelectItem>
-              <SelectItem value="150">Up to $150</SelectItem>
+              <SelectItem value="200">Up to $200</SelectItem>
+              <SelectItem value="500">Up to $500</SelectItem>
             </SelectContent>
           </Select>
 
@@ -104,7 +104,9 @@ export default function MeetingRooms() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
-        {isLoading ? (
+        {isError ? (
+          <p>No Rooms Found</p>
+        ) : isLoading ? (
           Array.from({ length: 4 }).map((_, index) => (
             <div key={index} className="animate-pulse">
               <div className="bg-white shadow rounded-lg p-4">
@@ -119,7 +121,7 @@ export default function MeetingRooms() {
             <RoomCard key={room._id} room={room} />
           ))
         ) : (
-          <p className="text-center text-gray-500">No rooms found</p>
+          roomsData(<p className="text-center text-gray-500">No rooms found</p>)
         )}
       </div>
 

@@ -4,6 +4,7 @@ const bookingsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllMyBookings: builder.query({
       query: () => `my-bookings`,
+      providesTags: ["Booking"],
     }),
     addBooking: builder.mutation({
       query: (data) => ({

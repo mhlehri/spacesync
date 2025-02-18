@@ -14,7 +14,7 @@ import { TBooking } from "@/types/booking";
 export default function MyBookings() {
   const user = selectCurrentUser();
   const { data, isLoading } = useGetAllMyBookingsQuery(user?._id as string);
-  console.log("my bookings data =>", data);
+  // console.log("my bookings data =>", data);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

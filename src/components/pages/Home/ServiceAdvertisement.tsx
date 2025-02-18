@@ -26,12 +26,12 @@ const services = [
 
 export default function ServiceAdvertisement() {
   return (
-    <section className="py-12 px-4 sm:px-6 lg:px-8">
+    <section className="py-12">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-3xl font-extrabold text-gray-900 text-center mb-12">
+        <h2 className="text-3xl font-semibold text-gray-900 mb-8 underline underline-offset-8 text-center">
           Our Services
         </h2>
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4 justify-between">
           {services.map((service) => (
             <Card
               key={service.title}

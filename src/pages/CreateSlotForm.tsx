@@ -50,8 +50,8 @@ const formSchema = z
 type FormValues = z.infer<typeof formSchema>;
 
 export default function CreateSlotForm() {
-  const { data, isError, isLoading } = useGetAllRoomsQuery("");
-  const roomsData = useMemo(() => data?.data || [], [data]);
+  const { data, isError, isLoading } = useGetAllRoomsQuery({});
+  const roomsData = useMemo(() => data?.data?.rooms || [], [data]);
   const [createSlot] = useCreateSlotMutation();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -66,16 +66,16 @@ export default function CreateSlotForm() {
   const onSubmit = async (values: FormValues) => {
     try {
       // Here you would typically send the data to your API
-      console.log(values);
+      //   console.log(values);
       const res = await createSlot(values);
-      if (res.error) {
+      if (res?.error) {
         // @ts-expect-error - The error object is not typed
-        throw new Error(res.error.data.message);
-      } else if (res.data.success) {
+        throw new Error(res?.error?.data?.message);
+      } else if (res?.data?.success) {
         toast.success("Slot created successfully", {
           richColors: true,
         });
-        console.log(res.data);
+        // console.log(res?.data);
         form.reset();
       }
     } catch (error) {
@@ -110,11 +110,12 @@ export default function CreateSlotForm() {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {roomsData.map((room: TRoom) => (
-                    <SelectItem key={room._id} value={room._id}>
-                      {room.name}
-                    </SelectItem>
-                  ))}
+                  {roomsData &&
+                    roomsData?.map((room: TRoom) => (
+                      <SelectItem key={room?._id} value={room?._id}>
+                        {room?.name}
+                      </SelectItem>
+                    ))}
                 </SelectContent>
               </Select>
               <FormMessage />

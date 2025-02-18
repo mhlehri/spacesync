@@ -1,15 +1,4 @@
-import {
-  CheckCircle,
-  Globe,
-  Leaf,
-  LifeBuoy,
-  Lightbulb,
-  Phone,
-  ShieldCheck,
-  Star,
-  User,
-  Users,
-} from "lucide-react";
+import { CheckCircle, Globe, Phone, User } from "lucide-react";
 import { motion } from "motion/react";
 
 const missionData = {
@@ -32,30 +21,6 @@ const missionData = {
     {
       icon: <Globe className="h-6 w-6 text-indigo-500" />,
       text: "Provide a platform that fosters a community-driven work environment, encouraging networking and collaboration.",
-    },
-    {
-      icon: <Lightbulb className="h-6 w-6 text-indigo-500" />,
-      text: "Offer flexible solutions that cater to both small teams and large organizations, accommodating various business needs.",
-    },
-    {
-      icon: <Leaf className="h-6 w-6 text-indigo-500" />,
-      text: "Implement sustainable practices to minimize environmental impact, promoting eco-friendly operations.",
-    },
-    {
-      icon: <ShieldCheck className="h-6 w-6 text-indigo-500" />,
-      text: "Continuously innovate and adapt to emerging technologies, staying ahead in the dynamic co-working industry.",
-    },
-    {
-      icon: <Users className="h-6 w-6 text-indigo-500" />,
-      text: "Ensure high standards of security and privacy for all users, maintaining a safe and confidential workspace.",
-    },
-    {
-      icon: <LifeBuoy className="h-6 w-6 text-indigo-500" />,
-      text: "Support professional development through workshops, seminars, and networking events, contributing to personal and business growth.",
-    },
-    {
-      icon: <Star className="h-6 w-6 text-indigo-500" />,
-      text: "Maintain a commitment to excellence in customer service, ensuring satisfaction and loyalty among our members.",
     },
   ],
 };

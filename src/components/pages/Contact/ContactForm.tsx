@@ -26,7 +26,7 @@ export default function ContactForm() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Here you would typically send the form data to your backend
-    console.log("Form submitted:", formData);
+    // console.log("Form submitted:", formData);
     toast.success("Form submitted", {
       description: "We've received your message and will get back to you soon.",
       position: "top-center",

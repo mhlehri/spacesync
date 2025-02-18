@@ -60,6 +60,7 @@ export default function Navbar() {
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
               {navigation.map((item) => (
                 <Link
+                  onClick={() => setIsOpen(!isOpen)}
                   key={item.name}
                   to={item.href}
                   className={`${
@@ -109,12 +110,14 @@ export default function Navbar() {
             ) : (
               <>
                 <Link
+                  onClick={() => setIsOpen(!isOpen)}
                   to="/login"
                   className="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium"
                 >
                   Login
                 </Link>
                 <Link
+                  onClick={() => setIsOpen(!isOpen)}
                   to="/signup"
                   className="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium"
                 >
@@ -145,6 +148,7 @@ export default function Navbar() {
           <div className="pt-2 pb-3 space-y-1">
             {navigation.map((item) => (
               <Link
+                onClick={() => setIsOpen(!isOpen)}
                 key={item.name}
                 to={item.href}
                 className={`${
@@ -161,6 +165,7 @@ export default function Navbar() {
             {user?.isAuthenticated ? (
               <div className="space-y-1">
                 <Link
+                  onClick={() => setIsOpen(!isOpen)}
                   to="/my-bookings"
                   className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 hover:border-gray-300"
                 >
@@ -168,6 +173,7 @@ export default function Navbar() {
                 </Link>
                 {user.isAdmin && (
                   <Link
+                    onClick={() => setIsOpen(!isOpen)}
                     to="/dashboard/room-management"
                     className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 hover:border-gray-300"
                   >
@@ -184,12 +190,14 @@ export default function Navbar() {
             ) : (
               <>
                 <Link
+                  onClick={() => setIsOpen(!isOpen)}
                   to="/login"
                   className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 hover:border-gray-300"
                 >
                   Login
                 </Link>
                 <Link
+                  onClick={() => setIsOpen(!isOpen)}
                   to="/signup"
                   className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 hover:border-gray-300"
                 >

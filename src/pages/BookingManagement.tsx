@@ -34,7 +34,7 @@ export default function BookingManagement() {
     useGetAllBookingsQuery("");
 
   const bookings = bookingsData?.data || [];
-  console.log(bookings);
+  // console.log(bookings);
   //? Use the useDeleteBookingByIdMutation hook to delete a booking
   const [deleteBooking] = useDeleteBookingByIdMutation();
 
@@ -48,6 +48,7 @@ export default function BookingManagement() {
           <TableCaption>A list of all bookings</TableCaption>
           <TableHeader>
             <TableRow>
+              <TableHead>SN.</TableHead>
               <TableHead>Room Name</TableHead>
               <TableHead>User Name</TableHead>
               <TableHead>Date</TableHead>
@@ -60,8 +61,9 @@ export default function BookingManagement() {
             {areBookingsLoading
               ? "loading..."
               : bookings
-              ? bookings.map((booking: TBooking) => (
+              ? bookings.map((booking: TBooking, index: number) => (
                   <TableRow key={booking?._id}>
+                    <TableCell>{index + 1}</TableCell>
                     <TableCell>{booking?.room?.name}</TableCell>
                     <TableCell>{booking?.user?.name}</TableCell>
                     <TableCell>{booking?.date}</TableCell>
@@ -101,7 +103,7 @@ export default function BookingManagement() {
                         variant="destructive"
                         size="sm"
                         onClick={async () => {
-                          console.log(booking._id, "id");
+                          // console.log(booking._id, "id");
                           const res = await updateBooking({
                             id: booking._id,
                             data: { isConfirmed: "rejected" },

@@ -81,8 +81,8 @@ export function BookingForm({
     roomId,
   });
 
-  console.log(availableSlots);
-  console.log(date);
+  // console.log(availableSlots);
+  // console.log(date);
   // console.log(availableSlots?.data);
   useEffect(() => {
     const timeSlot = isError

@@ -36,7 +36,7 @@ export default function RoomManagement() {
   //? Use the useDeleteRoomByIdMutation hook to delete a room
   const [deleteRoom] = useDeleteRoomByIdMutation();
   const navigate = useNavigate();
-  console.log(rooms);
+  // console.log(rooms);
 
   return (
     <div className="py-12">
@@ -51,6 +51,7 @@ export default function RoomManagement() {
           <TableCaption>A list of all rooms</TableCaption>
           <TableHeader>
             <TableRow>
+              <TableHead>SN.</TableHead>
               <TableHead>Name</TableHead>
               <TableHead>Room No.</TableHead>
               <TableHead>Floor No.</TableHead>
@@ -63,8 +64,9 @@ export default function RoomManagement() {
             {isLoading
               ? "loading..."
               : rooms
-              ? rooms?.map((room: TRoom) => (
+              ? rooms?.map((room: TRoom, index: number) => (
                   <TableRow key={room._id}>
+                    <TableCell>{index + 1}</TableCell>
                     <TableCell>{room.name}</TableCell>
                     <TableCell>{room.roomNo}</TableCell>
                     <TableCell>{room.floorNo}</TableCell>

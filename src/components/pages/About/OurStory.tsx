@@ -27,25 +27,32 @@ function OurStory() {
   ];
 
   return (
-    <div className="p-6 mx-auto w-fit py-12">
-      <h2 className="text-4xl font-bold text-center text-gray-800 mb-4 md:mb-8">
+    <div className="p-6 mx-auto py-12">
+      <h2 className="text-3xl font-semibold text-gray-900 mb-8 underline underline-offset-8 ">
         Our Story
       </h2>
-      <Timeline>
-        {milestones.map((milestone, index) => (
-          <p>
-            <TimelineItem
-              key={index}
-              index={index}
-              date={milestone.date}
-              title={milestone.title}
-              description={milestone.description}
-            >
-              {/* <TimelinePoint /> */}
-            </TimelineItem>
-          </p>
-        ))}
-      </Timeline>
+      <div className="flex gap-4 justify-between items-center flex-wrap md:flex-nowrap">
+        <Timeline>
+          {milestones.map((milestone, index) => (
+            <p>
+              <TimelineItem
+                key={index}
+                index={index}
+                date={milestone.date}
+                title={milestone.title}
+                description={milestone.description}
+              >
+                {/* <TimelinePoint /> */}
+              </TimelineItem>
+            </p>
+          ))}
+        </Timeline>
+        <img
+          className="sm:mt-5 sm:ml-5 w-full h-full rounded-3xl object-cover max-w-lg"
+          src="https://pagedone.io/asset/uploads/1717742431.png"
+          alt="about Us image"
+        />
+      </div>
     </div>
   );
 }

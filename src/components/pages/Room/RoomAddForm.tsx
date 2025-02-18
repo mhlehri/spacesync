@@ -1,11 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { DButton } from "@/components/AnimatedButton";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
@@ -67,7 +66,7 @@ export default function RoomAddForm() {
 
   const onSubmit = async (data: FormData) => {
     const d = { ...data, amenities };
-    console.log(d);
+    // console.log(d);
     const res = await addRoom(d);
     // @ts-expect-error - error is not null
     if ((res?.error?.data as Error)?.message.includes("E11000 duplicate key")) {
@@ -79,7 +78,7 @@ export default function RoomAddForm() {
       toast.success("Room added successfully", {
         richColors: true,
       });
-      console.log(res.data);
+      // console.log(res.data);
       reset(); // Reset the form after successful submission
     }
   };
@@ -90,7 +89,7 @@ export default function RoomAddForm() {
   };
 
   return (
-    <div className="">
+    <div className="p-6">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <h2 className="text-2xl text-center text-indigo-500 font-bold uppercase underline">
           Create New Room
