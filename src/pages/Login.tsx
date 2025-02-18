@@ -6,9 +6,10 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { DButton } from "../components/AnimatedButton";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
+import { Button } from "@/components/ui/button";
+import { DButton } from "@/components/AnimatedButton";
 
 type LoginFormData = {
   email: string;
@@ -124,6 +125,32 @@ export default function Login() {
               Signup
             </Link>
           </p>
+          <div className="mt-5 flex gap-2">
+            <Button
+              variant="outline"
+              type="button"
+              onClick={() => {
+                onSubmit({
+                  email: "user@gmail.com",
+                  password: "user1234",
+                });
+              }}
+            >
+              login as user
+            </Button>
+            <Button
+              variant="outline"
+              type="button"
+              onClick={() => {
+                onSubmit({
+                  email: "admin@gmail.com",
+                  password: "admin123",
+                });
+              }}
+            >
+              login as admin
+            </Button>
+          </div>
         </div>
       </div>
     </div>
